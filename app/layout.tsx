@@ -1,30 +1,47 @@
 import "@/app/globals.css"
-import { Inter } from "next/font/google"
+import { Montserrat, Playfair_Display } from "next/font/google"
 import Link from "next/link"
+import Image from "next/image"
 
 import { ThemeProvider } from "@/components/theme-provider"
 
-const inter = Inter({ subsets: ["latin"], weight: ["300", "400", "500"] })
+// Primary font for body text
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-montserrat",
+})
+
+// Secondary font for headings
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-playfair",
+})
 
 export const metadata = {
-  title: "Artist Portfolio",
+  title: "JEART - Artist Portfolio",
   description: "A minimal portfolio for showcasing artwork",
-    generator: 'v0.dev'
+  generator: "v0.dev",
 }
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${montserrat.variable} ${playfair.variable} font-sans`}>
         <ThemeProvider attribute="class" defaultTheme="light">
           <div className="flex flex-col min-h-screen">
             <header className="py-6 bg-white">
               <div className="container px-4 mx-auto max-w-6xl">
                 <div className="flex items-center justify-between">
-                  <Link href="/" className="text-xl font-light text-gray-900">
-                    Artist Name
+                  <Link href="/" className="flex items-center">
+                    <div className="relative w-12 h-12">
+                      <Image src="/images/logo.jpeg" alt="JEART Logo" fill className="object-contain" priority />
+                    </div>
                   </Link>
-                  <nav className="hidden space-x-8 md:flex">
+
+                  {/* Centered Navigation */}
+                  <nav className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-8">
                     <Link href="/" className="text-sm text-gray-500 transition-colors hover:text-gray-900">
                       Home
                     </Link>
@@ -38,10 +55,14 @@ export default function RootLayout({ children }) {
                       Contact
                     </Link>
                   </nav>
+
+                  {/* Mobile menu button */}
                   <div className="md:hidden">
-                    {/* Mobile menu button would go here */}
                     <button className="text-gray-500">Menu</button>
                   </div>
+
+                  {/* Empty div to balance the layout */}
+                  <div className="hidden md:block w-12"></div>
                 </div>
               </div>
             </header>
@@ -50,7 +71,7 @@ export default function RootLayout({ children }) {
               <div className="container px-4 mx-auto max-w-6xl">
                 <div className="flex flex-col items-center justify-between space-y-4 md:flex-row md:space-y-0">
                   <div className="text-sm text-gray-500">
-                    &copy; {new Date().getFullYear()} Artist Name. All rights reserved.
+                    &copy; {new Date().getFullYear()} JEART. All rights reserved.
                   </div>
                   <div className="flex space-x-6">
                     <Link href="#" className="text-sm text-gray-500 hover:text-gray-900">
