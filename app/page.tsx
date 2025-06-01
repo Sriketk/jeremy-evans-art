@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react"
 import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { useMobile } from "@/hooks/use-mobile"
+import useMobile from "@/hooks/use-mobile"
 
 export default function Home() {
   const isMobile = useMobile()
