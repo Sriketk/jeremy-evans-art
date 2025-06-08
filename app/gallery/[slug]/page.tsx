@@ -1,21 +1,39 @@
-import Link from "next/link"
-import Image from "next/image"
-import { ArrowLeft } from "lucide-react"
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowLeft } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+
+const contentful = require("contentful");
+
+const client = contentful.createClient({
+  space: process.env.CONTENTFUL_SPACE_KEY, // defaults to 'master' if not set
+  accessToken: process.env.CONTENTFUL_DELIVERY_KEY,
+});
+
+const values = client
+  .getEntries()
+  .then((response: any) => {const imageUrl = console.log(response.items[0].fields.image)})
+  .catch(console.error);
+
 
 export default function ArtworkDetailPage({ params }) {
-  const { slug } = params
+  const { slug } = params;
 
   // In a real application, you would fetch the artwork data based on the slug
   // For this example, we'll find it in our mock data
-  const artwork = allArtwork.find((art) => art.slug === slug) || allArtwork[0]
+  const artwork = allArtwork.find((art) => art.slug === slug) || allArtwork[0];
 
   return (
     <div className="min-h-screen bg-white">
       <div className="container px-4 py-16 mx-auto max-w-6xl">
-        <Button asChild variant="ghost" size="sm" className="mb-8 hover:bg-transparent hover:text-gray-900 p-0 h-auto">
+        <Button
+          asChild
+          variant="ghost"
+          size="sm"
+          className="mb-8 hover:bg-transparent hover:text-gray-900 p-0 h-auto"
+        >
           <Link href="/gallery">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Gallery
@@ -35,7 +53,9 @@ export default function ArtworkDetailPage({ params }) {
           </div>
 
           <div>
-            <h1 className="text-3xl font-light text-gray-900">{artwork.title}</h1>
+            <h1 className="text-3xl font-light text-gray-900">
+              {artwork.title}
+            </h1>
             <p className="mt-2 text-gray-500">{artwork.year}</p>
             <p className="mt-1 text-gray-500">{artwork.category}</p>
 
@@ -44,15 +64,24 @@ export default function ArtworkDetailPage({ params }) {
             <div className="prose max-w-none">
               <p className="text-gray-700">{artwork.description}</p>
               <p className="text-gray-700">
-                {artwork.details || "Dimensions variable. Please inquire for availability and pricing."}
+                {artwork.details ||
+                  "Dimensions variable. Please inquire for availability and pricing."}
               </p>
 
-              <h3 className="mt-8 text-xl font-light text-gray-900">About this Work</h3>
+              <h3 className="mt-8 text-xl font-light text-gray-900">
+                About this Work
+              </h3>
               <p className="text-gray-700">
                 {artwork.about ||
-                  `This piece is part of an ongoing exploration of ${artwork.theme || "form and space"}. 
-                The work emerged from a process of ${artwork.process || "layering and reduction"}, 
-                creating a dialogue between ${artwork.elements || "structure and fluidity"}.`}
+                  `This piece is part of an ongoing exploration of ${
+                    artwork.theme || "form and space"
+                  }. 
+                The work emerged from a process of ${
+                  artwork.process || "layering and reduction"
+                }, 
+                creating a dialogue between ${
+                  artwork.elements || "structure and fluidity"
+                }.`}
               </p>
             </div>
 
@@ -61,9 +90,14 @@ export default function ArtworkDetailPage({ params }) {
             <div className="mt-8">
               <h3 className="text-xl font-light text-gray-900">Inquire</h3>
               <p className="mt-2 text-gray-600">
-                For information about availability, pricing, or to schedule a viewing, please get in touch.
+                For information about availability, pricing, or to schedule a
+                viewing, please get in touch.
               </p>
-              <Button asChild variant="outline" className="mt-4 border-gray-300 hover:bg-gray-50">
+              <Button
+                asChild
+                variant="outline"
+                className="mt-4 border-gray-300 hover:bg-gray-50"
+              >
                 <Link href="/contact">Contact</Link>
               </Button>
             </div>
@@ -71,13 +105,22 @@ export default function ArtworkDetailPage({ params }) {
         </div>
 
         <div className="mt-24">
-          <h2 className="mb-8 text-2xl font-light text-gray-900">Related Works</h2>
+          <h2 className="mb-8 text-2xl font-light text-gray-900">
+            Related Works
+          </h2>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
             {allArtwork
-              .filter((art) => art.id !== artwork.id && art.category === artwork.category)
+              .filter(
+                (art) =>
+                  art.id !== artwork.id && art.category === artwork.category
+              )
               .slice(0, 3)
               .map((art) => (
-                <Link key={art.id} href={`/gallery/${art.slug}`} className="group">
+                <Link
+                  key={art.id}
+                  href={`/gallery/${art.slug}`}
+                  className="group"
+                >
                   <div className="overflow-hidden">
                     <div className="relative aspect-square">
                       <Image
@@ -88,7 +131,9 @@ export default function ArtworkDetailPage({ params }) {
                       />
                     </div>
                     <div className="mt-3">
-                      <h3 className="text-base font-medium text-gray-900">{art.title}</h3>
+                      <h3 className="text-base font-medium text-gray-900">
+                        {art.title}
+                      </h3>
                       <p className="mt-1 text-sm text-gray-500">
                         {art.year} · {art.category}
                       </p>
@@ -100,7 +145,7 @@ export default function ArtworkDetailPage({ params }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 const allArtwork = [
@@ -109,7 +154,8 @@ const allArtwork = [
     title: "Untitled No. 7",
     slug: "untitled-no-7",
     description: "Mixed media on canvas, 36 × 48 inches.",
-    details: "Materials include acrylic, charcoal, and found paper on stretched canvas.",
+    details:
+      "Materials include acrylic, charcoal, and found paper on stretched canvas.",
     image: "/placeholder.svg?height=800&width=600",
     category: "Mixed Media",
     year: "2023",
@@ -148,7 +194,8 @@ const allArtwork = [
     title: "Fragments",
     slug: "fragments",
     description: "Digital collage, dimensions variable.",
-    details: "Limited edition of 10 prints available, archival pigment on cotton rag paper.",
+    details:
+      "Limited edition of 10 prints available, archival pigment on cotton rag paper.",
     image: "/placeholder.svg?height=600&width=600",
     category: "Digital",
     year: "2022",
@@ -200,7 +247,8 @@ const allArtwork = [
     title: "Digital Landscape",
     slug: "digital-landscape",
     description: "Digital painting, dimensions variable.",
-    details: "Limited edition of 5 prints available, archival pigment on aluminum.",
+    details:
+      "Limited edition of 5 prints available, archival pigment on aluminum.",
     image: "/placeholder.svg?height=600&width=600",
     category: "Digital",
     year: "2022",
@@ -221,4 +269,17 @@ const allArtwork = [
     process: "building up and scraping back paint",
     elements: "subtle tonal variation and surface texture",
   },
-]
+  {
+    id: 10,
+    title: "ads",
+    slug: "monochrome-study",
+    description: "Oil on linen, 20 × 20 inches.",
+    details: "Floated in natural wood frame.",
+    image: "/placeholder.svg?height=600&width=600",
+    category: "Painting",
+    year: "2023",
+    theme: "reduction and minimalism",
+    process: "building up and scraping back paint",
+    elements: "subtle tonal variation and surface texture",
+  },
+];

@@ -1,14 +1,16 @@
-import Link from "next/link"
-import Image from "next/image"
+import Link from "next/link";
+import Image from "next/image";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function GalleryPage() {
   return (
     <div className="min-h-screen bg-white">
       <div className="container px-4 py-16 mx-auto max-w-6xl">
         <h1 className="text-3xl font-light text-gray-900">Gallery</h1>
-        <p className="mt-2 text-lg text-gray-500">A collection of selected works</p>
+        <p className="mt-2 text-lg text-gray-500">
+          A collection of selected works
+        </p>
 
         <Tabs defaultValue="all" className="w-full mt-12">
           <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent mb-12">
@@ -94,7 +96,7 @@ export default function GalleryPage() {
         </Tabs>
       </div>
     </div>
-  )
+  );
 }
 
 function ArtworkCard({ artwork }) {
@@ -110,14 +112,16 @@ function ArtworkCard({ artwork }) {
           />
         </div>
         <div className="mt-3">
-          <h3 className="text-base font-medium text-gray-900">{artwork.title}</h3>
+          <h3 className="text-base font-medium text-gray-900">
+            {artwork.title}
+          </h3>
           <p className="mt-1 text-sm text-gray-500">
             {artwork.year} · {artwork.category}
           </p>
         </div>
       </div>
     </Link>
-  )
+  );
 }
 
 const allArtwork = [
@@ -202,4 +206,4 @@ const allArtwork = [
     category: "Painting",
     year: "2023",
   },
-]
+];

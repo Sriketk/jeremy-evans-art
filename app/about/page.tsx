@@ -131,7 +131,7 @@ export default function AboutPage() {
                     <p className="mt-2 text-gray-600">{event.description}</p>
 
                     {event.image && (
-                      <div className="relative mt-4 overflow-hidden rounded-md aspect-video">
+                      <div className="relative mt-4 mx-2 overflow-hidden rounded-md aspect-video">
                         <Image
                           src={event.image || "/placeholder.svg"}
                           alt={event.title}
