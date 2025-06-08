@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import useMobile from "@/hooks/use-mobile";
 import { HomeContext } from "@/app/lib/context/homeContextProvider";
 
-
 export default function Home() {
   const { homePageContent } = useContext(HomeContext);
   console.log(homePageContent);
