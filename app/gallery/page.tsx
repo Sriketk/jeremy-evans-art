@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-
+import { Artwork } from "@/app/lib/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function GalleryPage() {
@@ -99,7 +99,7 @@ export default function GalleryPage() {
   );
 }
 
-function ArtworkCard({ artwork }) {
+function ArtworkCard({ artwork }: { artwork: Artwork }) {
   return (
     <Link href={`/gallery/${artwork.slug}`} className="group">
       <div className="overflow-hidden">
@@ -133,6 +133,7 @@ const allArtwork = [
     image: "/placeholder.svg?height=600&width=600",
     category: "Mixed Media",
     year: "2023",
+    about: "Mixed media on canvas.",
   },
   {
     id: 2,
@@ -142,6 +143,7 @@ const allArtwork = [
     image: "/placeholder.svg?height=600&width=600",
     category: "Painting",
     year: "2022",
+    about: "Oil on canvas.",
   },
   {
     id: 3,
@@ -151,6 +153,7 @@ const allArtwork = [
     image: "/placeholder.svg?height=600&width=600",
     category: "Drawing",
     year: "2023",
+    about: "Charcoal and pastel on paper.",
   },
   {
     id: 4,
@@ -160,6 +163,7 @@ const allArtwork = [
     image: "/placeholder.svg?height=600&width=600",
     category: "Digital",
     year: "2022",
+    about: "Digital collage.",
   },
   {
     id: 5,
@@ -169,6 +173,7 @@ const allArtwork = [
     image: "/placeholder.svg?height=600&width=600",
     category: "Painting",
     year: "2023",
+    about: "Acrylic on panel.",
   },
   {
     id: 6,
@@ -178,6 +183,7 @@ const allArtwork = [
     image: "/placeholder.svg?height=600&width=600",
     category: "Drawing",
     year: "2022",
+    about: "Ink on paper.",
   },
   {
     id: 7,
@@ -187,6 +193,7 @@ const allArtwork = [
     image: "/placeholder.svg?height=600&width=600",
     category: "Mixed Media",
     year: "2023",
+    about: "Mixed media installation, variable dimensions.",
   },
   {
     id: 8,
@@ -196,6 +203,7 @@ const allArtwork = [
     image: "/placeholder.svg?height=600&width=600",
     category: "Digital",
     year: "2022",
+    about: "Digital painting.",
   },
   {
     id: 9,
@@ -205,5 +213,6 @@ const allArtwork = [
     image: "/placeholder.svg?height=600&width=600",
     category: "Painting",
     year: "2023",
+    about: "Oil on linen.",
   },
 ];

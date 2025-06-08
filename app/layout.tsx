@@ -27,7 +27,11 @@ export const metadata = {
   generator: "v0.dev",
 };
 
-export default async function RootLayout({ children }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const homePageContent = await getHomePageContent();
 
   console.log(homePageContent);

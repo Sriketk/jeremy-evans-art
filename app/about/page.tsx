@@ -35,7 +35,7 @@ export default function AboutPage() {
       if (!timelineRef.current) return
 
       const timelineEl = timelineRef.current
-      const timelineRect = timelineEl.getBoundingClientRect()
+      const timelineRect = (timelineEl as HTMLElement).getBoundingClientRect()
       const timelineTop = timelineRect.top
       const timelineHeight = timelineRect.height
       const windowHeight = window.innerHeight
@@ -52,7 +52,7 @@ export default function AboutPage() {
       // Update the progress line height
       const progressLine = document.querySelector(".timeline-progress")
       if (progressLine) {
-        progressLine.style.height = `${progress * 100}%`
+        (progressLine as HTMLElement).style.height = `${progress * 100}%`
       }
     }
 

@@ -3,24 +3,18 @@
 import { useEffect, useState, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { Artwork } from "@/app/lib/types"
 
-interface MasonryItem {
-  title: string
-  description: string
-  image: string
-  year: number
-  category: string
-  slug: string
-}
+
 
 interface MasonryGridProps {
-  items: MasonryItem[]
+  items: Artwork[]
   isVisible: boolean
   columns?: number
   gap?: number
 }
 
-interface PositionedItem extends MasonryItem {
+interface PositionedItem extends Artwork {
   width: number
   height: number
   x: number

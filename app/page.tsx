@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import useMobile from "@/hooks/use-mobile"
 import { HomeContext } from "@/app/lib/context/homeContextProvider"
 import MasonryGrid from "@/components/ui/masonry-grid"
+import { HomePageContent, Artwork } from "@/app/lib/types"
 
 export default function Home() {
   const { homePageContent } = useContext(HomeContext)
@@ -16,9 +17,9 @@ export default function Home() {
   const galleryRef = useRef(null)
   const [isVisible, setIsVisible] = useState(false)
 
-  const featuredArtwork = []
+  const featuredArtwork: Artwork[] = []
   const images = homePageContent.homePageImages
-  images.forEach((image) => {
+  images.forEach((image: HomePageContent["homePageImages"][0]) => {
     featuredArtwork.push({
       title: image.fields.title,
       description: image.fields.artDescription,
@@ -26,6 +27,7 @@ export default function Home() {
       year: image.fields.year,
       category: "Portraits",
       slug: image.fields.title,
+      about: image.fields.about,
     })
   })
 

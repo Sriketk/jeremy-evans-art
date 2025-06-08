@@ -4,22 +4,11 @@ import { ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-
-const contentful = require("contentful");
-
-const client = contentful.createClient({
-  space: process.env.CONTENTFUL_SPACE_KEY, // defaults to 'master' if not set
-  accessToken: process.env.CONTENTFUL_DELIVERY_KEY,
-});
-
-const values = client
-  .getEntries()
-  .then((response: any) => {const imageUrl = console.log(response.items[0].fields.image)})
-  .catch(console.error);
+import { Artwork } from "@/app/lib/types";
 
 
-export default function ArtworkDetailPage({ params }) {
-  const { slug } = params;
+export default async function ArtworkDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
 
   // In a real application, you would fetch the artwork data based on the slug
   // For this example, we'll find it in our mock data
@@ -64,7 +53,7 @@ export default function ArtworkDetailPage({ params }) {
             <div className="prose max-w-none">
               <p className="text-gray-700">{artwork.description}</p>
               <p className="text-gray-700">
-                {artwork.details ||
+                {artwork.description ||
                   "Dimensions variable. Please inquire for availability and pricing."}
               </p>
 
@@ -162,6 +151,7 @@ const allArtwork = [
     theme: "memory and materiality",
     process: "intuitive mark-making and collage",
     elements: "texture and negative space",
+    about: "Mixed media on canvas, 36 × 48 inches.",
   },
   {
     id: 2,
@@ -175,6 +165,7 @@ const allArtwork = [
     theme: "color relationships and spatial perception",
     process: "layering transparent glazes",
     elements: "geometric forms and atmospheric color",
+    about: "Oil on canvas, 24 × 30 inches.",
   },
   {
     id: 3,
@@ -188,6 +179,7 @@ const allArtwork = [
     theme: "light and shadow",
     process: "observation and tonal rendering",
     elements: "contrast and subtle gradation",
+    about: "Charcoal and pastel on paper, 18 × 24 inches.",
   },
   {
     id: 4,
@@ -202,6 +194,7 @@ const allArtwork = [
     theme: "fragmentation and reconstruction",
     process: "digital manipulation of found imagery",
     elements: "juxtaposition and repetition",
+    about: "Digital collage, dimensions variable.",
   },
   {
     id: 5,
@@ -215,6 +208,7 @@ const allArtwork = [
     theme: "urban environments",
     process: "hard-edge painting techniques",
     elements: "line and planar relationships",
+    about: "Acrylic on panel, 16 × 16 inches.",
   },
   {
     id: 6,
@@ -228,6 +222,7 @@ const allArtwork = [
     theme: "movement and gesture",
     process: "spontaneous mark-making",
     elements: "line weight and rhythm",
+    about: "Ink on paper, 11 × 14 inches.",
   },
   {
     id: 7,
@@ -241,6 +236,7 @@ const allArtwork = [
     theme: "architectural space and perception",
     process: "assemblage and site-specific installation",
     elements: "physical presence and viewer interaction",
+    about: "Mixed media installation, variable dimensions.",
   },
   {
     id: 8,
@@ -255,6 +251,7 @@ const allArtwork = [
     theme: "natural and artificial environments",
     process: "digital painting and compositing",
     elements: "organic forms and synthetic color",
+    about: "Digital painting, dimensions variable.",
   },
   {
     id: 9,
@@ -268,6 +265,7 @@ const allArtwork = [
     theme: "reduction and minimalism",
     process: "building up and scraping back paint",
     elements: "subtle tonal variation and surface texture",
+    about: "Oil on linen, 20 × 20 inches.",
   },
   {
     id: 10,
@@ -281,5 +279,6 @@ const allArtwork = [
     theme: "reduction and minimalism",
     process: "building up and scraping back paint",
     elements: "subtle tonal variation and surface texture",
+    about: "Oil on linen, 20 × 20 inches.",
   },
 ];
