@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ThemeProvider } from "@/components/theme-provider";
 import * as contentful from "contentful";
 import { HomeContextProvider } from "@/app/lib/context/homeContextProvider";
+import { getHomePageContent } from "@/app/lib/contentful/api";
 
 // Primary font for body text
 const montserrat = Montserrat({
@@ -27,20 +28,7 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const client = contentful.createClient({
-    // This is the space ID. A space is like a project folder in Contentful terms
-    space: process.env.CONTENTFUL_SPACE_KEY || "",
-    // This is the access token for this space. Normally you get both ID and the token in the Contentful web app
-    accessToken: process.env.CONTENTFUL_DELIVERY_KEY || "",
-  });
-  const entry = await client.getEntry("5hiyybPPaEjLp4HXRCoUpV");
-  const homePageContent = await client
-    .getEntry("5hiyybPPaEjLp4HXRCoUpV")
-    .then((entry) => {
-      console.log(entry);
-      return entry.fields;
-    })
-    .catch((err) => console.log(err));
+  const homePageContent = await getHomePageContent();
 
   console.log(homePageContent);
   return (
