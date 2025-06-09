@@ -1,46 +1,43 @@
-import "@/app/globals.css";
-import { Montserrat, Playfair_Display } from "next/font/google";
-import Link from "next/link";
-import Image from "next/image";
-import { ThemeProvider } from "@/components/theme-provider";
-import * as contentful from "contentful";
-import { HomeContextProvider } from "@/app/lib/context/homeContextProvider";
-import {siInstagram, siFacebook, siGmail} from 'simple-icons';
+import type React from "react"
+import "@/app/globals.css"
+import { Montserrat, Playfair_Display } from "next/font/google"
+import Link from "next/link"
+import Image from "next/image"
+import { HomeContextProvider } from "@/app/lib/context/homeContextProvider"
+import { siInstagram, siFacebook, siGmail } from "simple-icons"
+import { NavigationMenu } from "@/components/ui/navigation-menu"
 
-import {
-  getAboutPageContent,
-  getHomePageContent,
-} from "@/app/lib/contentful/api";
+import { getAboutPageContent, getHomePageContent } from "@/app/lib/contentful/api"
 
 // Primary font for body text
 const montserrat = Montserrat({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
   variable: "--font-montserrat",
-});
+})
 
 // Secondary font for headings
 const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   variable: "--font-playfair",
-});
+})
 
 export const metadata = {
   title: "JEART - Artist Portfolio",
   description: "A minimal portfolio for showcasing artwork",
   generator: "v0.dev",
-};
+}
 
 export default async function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
-  const homePageContent = await getHomePageContent();
-  const aboutPageContent = await getAboutPageContent();
+  const homePageContent = await getHomePageContent()
+  const aboutPageContent = await getAboutPageContent()
 
-  console.log(homePageContent);
+  console.log(homePageContent)
   return (
     <html lang="en">
       <body className={`${montserrat.variable} ${playfair.variable} font-sans`}>
@@ -51,48 +48,12 @@ export default async function RootLayout({
               <div className="flex items-center justify-between">
                 <Link href="/" className="flex items-center">
                   <div className="relative w-12 h-12">
-                    <Image
-                      src="/images/logo.jpeg"
-                      alt="JEART Logo"
-                      fill
-                      className="object-contain"
-                      priority
-                    />
+                    <Image src="/images/logo.jpeg" alt="JEART Logo" fill className="object-contain" priority />
                   </div>
                 </Link>
 
-                {/* Centered Navigation */}
-                <nav className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-8">
-                  <Link
-                    href="/"
-                    className="text-sm text-gray-500 transition-colors hover:text-gray-900"
-                  >
-                    Home
-                  </Link>
-                  <Link
-                    href="/gallery"
-                    className="text-sm text-gray-500 transition-colors hover:text-gray-900"
-                  >
-                    Gallery
-                  </Link>
-                  <Link
-                    href="/about"
-                    className="text-sm text-gray-500 transition-colors hover:text-gray-900"
-                  >
-                    About
-                  </Link>
-                  <Link
-                    href="/contact"
-                    className="text-sm text-gray-500 transition-colors hover:text-gray-900"
-                  >
-                    Contact
-                  </Link>
-                </nav>
-
-                {/* Mobile menu button */}
-                <div className="md:hidden">
-                  <button className="text-gray-500">Menu</button>
-                </div>
+                {/* Navigation Menu Component */}
+                <NavigationMenu />
 
                 {/* Empty div to balance the layout */}
                 <div className="hidden md:block w-12"></div>
@@ -100,19 +61,14 @@ export default async function RootLayout({
             </div>
           </header>
           <main className="flex-1">
-            <HomeContextProvider
-              homePageContent={homePageContent}
-              aboutPageContent={aboutPageContent}
-            >
+            <HomeContextProvider homePageContent={homePageContent} aboutPageContent={aboutPageContent}>
               {children}
             </HomeContextProvider>
           </main>
           <footer className="py-12 bg-white">
             <div className="container px-4 mx-auto max-w-6xl">
               <div className="flex flex-col items-center justify-between space-y-4 md:flex-row md:space-y-0">
-                <div className="text-sm text-gray-500">
-                  &copy; {new Date().getFullYear()} Jeremy Evans
-                </div>
+                <div className="text-sm text-gray-500">&copy; {new Date().getFullYear()} Jeremy Evans</div>
                 <div className="flex space-x-6">
                   <Link
                     href="https://www.instagram.com/evansart21/?hl=en"
@@ -122,7 +78,7 @@ export default async function RootLayout({
                     <div
                       dangerouslySetInnerHTML={{ __html: siInstagram.svg }}
                       className="w-6 h-6"
-                      style={{ fill: 'currentColor' }}
+                      style={{ fill: "currentColor" }}
                     />
                   </Link>
                   <Link
@@ -133,7 +89,7 @@ export default async function RootLayout({
                     <div
                       dangerouslySetInnerHTML={{ __html: siFacebook.svg }}
                       className="w-6 h-6"
-                      style={{ fill: 'currentColor' }}
+                      style={{ fill: "currentColor" }}
                     />
                   </Link>
                   <Link
@@ -144,7 +100,7 @@ export default async function RootLayout({
                     <div
                       dangerouslySetInnerHTML={{ __html: siGmail.svg }}
                       className="w-6 h-6"
-                      style={{ fill: 'currentColor' }}
+                      style={{ fill: "currentColor" }}
                     />
                   </Link>
                 </div>
@@ -155,5 +111,5 @@ export default async function RootLayout({
         {/* </ThemeProvider> */}
       </body>
     </html>
-  );
+  )
 }

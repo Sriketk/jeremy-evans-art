@@ -3,15 +3,14 @@
 import { useEffect, useState, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Artwork } from "@/app/lib/types"
-
-
+import type { Artwork } from "@/app/lib/types"
 
 interface MasonryGridProps {
   items: Artwork[]
   isVisible: boolean
   columns?: number
   gap?: number
+  visibleItems?: Set<number>
 }
 
 interface PositionedItem extends Artwork {
@@ -22,7 +21,13 @@ interface PositionedItem extends Artwork {
   index: number
 }
 
-export default function MasonryGrid({ items, isVisible, columns = 3, gap = 16 }: MasonryGridProps) {
+export default function MasonryGrid({
+  items,
+  isVisible,
+  columns = 3,
+  gap = 16,
+  visibleItems = new Set(),
+}: MasonryGridProps) {
   const [positionedItems, setPositionedItems] = useState<PositionedItem[]>([])
   const [containerHeight, setContainerHeight] = useState(0)
   const [containerWidth, setContainerWidth] = useState(0)
@@ -105,45 +110,50 @@ export default function MasonryGrid({ items, isVisible, columns = 3, gap = 16 }:
 
   return (
     <div ref={containerRef} className="relative w-full" style={{ height: containerHeight }}>
-      {positionedItems.map((item, index) => (
-        <Link
-          key={item.title}
-          href={`/gallery/${item.slug}`}
-          className={`absolute group overflow-hidden transition-all duration-1000 ease-out hover:z-10 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-          style={{
-            left: item.x,
-            top: item.y,
-            width: item.width,
-            height: item.height,
-            transitionDelay: `${800 + index * 100}ms`,
-          }}
-        >
-          <div className="relative w-full h-full rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
-            <Image
-              src={item.image.startsWith("//") ? `https:${item.image}` : item.image}
-              alt={item.title}
-              fill
-              sizes={`${100 / columns}vw`}
-              className="object-cover transition-all duration-700 ease-in-out group-hover:scale-105"
-            />
+      {positionedItems.map((item, index) => {
+        const isItemVisible = visibleItems.has(item.index)
 
-            {/* Overlay with artwork info */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 transition-all duration-500 group-hover:opacity-100">
-              <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                <h3 className="text-white font-medium text-lg mb-1 drop-shadow-lg">{item.title}</h3>
-                <p className="text-white/90 text-sm drop-shadow-lg">
-                  {item.year} · {item.category}
-                </p>
+        return (
+          <Link
+            key={item.title}
+            href={`/gallery/${item.slug}`}
+            className={`gallery-item absolute group overflow-hidden transition-all duration-700 ease-out hover:z-10 ${
+              isItemVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"
+            }`}
+            style={{
+              left: item.x,
+              top: item.y,
+              width: item.width,
+              height: item.height,
+              transitionDelay: `${item.index * 150}ms`,
+            }}
+            data-gallery-index={item.index}
+          >
+            <div className="relative w-full h-full rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
+              <Image
+                src={item.image.startsWith("//") ? `https:${item.image}` : item.image}
+                alt={item.title}
+                fill
+                sizes={`${100 / columns}vw`}
+                className="object-cover transition-all duration-700 ease-in-out group-hover:scale-105"
+              />
+
+              {/* Overlay with artwork info */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 transition-all duration-500 group-hover:opacity-100">
+                <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                  <h3 className="text-white font-medium text-lg mb-1 drop-shadow-lg">{item.title}</h3>
+                  <p className="text-white/90 text-sm drop-shadow-lg">
+                    {item.year} · {item.category}
+                  </p>
+                </div>
               </div>
-            </div>
 
-            {/* Subtle border glow on hover */}
-            <div className="absolute inset-0 border-2 border-white/0 group-hover:border-white/20 transition-all duration-500 rounded-lg pointer-events-none"></div>
-          </div>
-        </Link>
-      ))}
+              {/* Subtle border glow on hover */}
+              <div className="absolute inset-0 border-2 border-white/0 group-hover:border-white/20 transition-all duration-500 rounded-lg pointer-events-none"></div>
+            </div>
+          </Link>
+        )
+      })}
     </div>
   )
 }
