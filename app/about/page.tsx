@@ -1,87 +1,97 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useContext } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { HomeContext } from "../lib/context/homeContextProvider"
-import { describe } from "node:test"
-
+import { useEffect, useRef, useContext, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { HomeContext } from "../lib/context/homeContextProvider";
 
 export default function AboutPage() {
-  const timelineRef = useRef(null)
-  const {aboutPageContent} = useContext(HomeContext)
-  console.log(aboutPageContent)
+  const timelineRef = useRef(null);
+  const { aboutPageContent } = useContext(HomeContext);
+  const [visibleEvents, setVisibleEvents] = useState<Set<number>>(new Set());
+  console.log(aboutPageContent);
 
+  const timelineEvents: any = [];
 
-  const timelineEvents:any = []
-
-  aboutPageContent.timelineEvents.forEach((timeLineEvent:any) => {
+  aboutPageContent.timelineEvents.forEach((timeLineEvent: any) => {
     timelineEvents.push({
       year: timeLineEvent.fields.year,
       title: timeLineEvent.fields.title,
       description: timeLineEvent.fields.description,
-      image: timeLineEvent.fields?.image?.fields.file.url
+      image: timeLineEvent.fields?.image?.fields.file.url,
+      details: timeLineEvent.fields.details,
     });
   });
 
   useEffect(() => {
-    // Animation for timeline items when they come into view
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate-in")
-          }
-        })
-      },
-      {
-        threshold: 0.1,
-        rootMargin: "0px 0px -100px 0px",
-      },
-    )
-
-    // Observe all timeline items
-    const timelineItems = document.querySelectorAll(".timeline-item")
-    timelineItems.forEach((item) => {
-      observer.observe(item)
-    })
-
     // Progress indicator animation
     const handleScroll = () => {
-      if (!timelineRef.current) return
+      if (!timelineRef.current) return;
 
-      const timelineEl = timelineRef.current
-      const timelineRect = (timelineEl as HTMLElement).getBoundingClientRect()
-      const timelineTop = timelineRect.top
-      const timelineHeight = timelineRect.height
-      const windowHeight = window.innerHeight
+      const timelineEl = timelineRef.current;
+      const timelineRect = (timelineEl as HTMLElement).getBoundingClientRect();
+      const timelineTop = timelineRect.top;
+      const timelineHeight = timelineRect.height;
+      const windowHeight = window.innerHeight;
 
       // Calculate how much of the timeline has been scrolled through
-      let progress = 0
+      let progress = 0;
       if (timelineTop <= windowHeight && timelineTop + timelineHeight >= 0) {
         // Calculate progress based on how much of the timeline is above the viewport
-        const scrolledPastTop = Math.max(0, windowHeight - timelineTop)
-        const totalScrollableHeight = timelineHeight + windowHeight
-        progress = Math.min(1, Math.max(0, scrolledPastTop / totalScrollableHeight))
+        const scrolledPastTop = Math.max(0, windowHeight - timelineTop);
+        const totalScrollableHeight = timelineHeight + windowHeight;
+        progress = Math.min(
+          1,
+          Math.max(0, scrolledPastTop / totalScrollableHeight)
+        );
       }
 
       // Update the progress line height
-      const progressLine = document.querySelector(".timeline-progress")
+      const progressLine = document.querySelector(".timeline-progress");
       if (progressLine) {
-        (progressLine as HTMLElement).style.height = `${progress * 100}%`
+        (progressLine as HTMLElement).style.height = `${progress * 100}%`;
       }
-    }
+    };
 
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll);
     // Initial call to set positions
-    handleScroll()
+    handleScroll();
 
     return () => {
-      observer.disconnect()
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [])
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Intersection Observer for timeline event animations
+    const observerOptions = {
+      threshold: 0.2, // Trigger when 20% of the element is visible
+      rootMargin: "0px 0px -10% 0px", // Start animation slightly before element is fully in view
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const eventIndex = Number.parseInt(
+          entry.target.getAttribute("data-event-index") || "0"
+        );
+
+        if (entry.isIntersecting) {
+          setVisibleEvents((prev) => new Set([...prev, eventIndex]));
+        }
+      });
+    }, observerOptions);
+
+    // Observe all timeline event elements
+    const eventElements = document.querySelectorAll(".timeline-event");
+    eventElements.forEach((element) => {
+      observer.observe(element);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [timelineEvents.length]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -93,7 +103,10 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 gap-16 mb-24 lg:grid-cols-2">
             <div className="relative aspect-[3/4]">
               <Image
-                src={aboutPageContent.jeremyEvansPicture.fields.file.url}
+                src={
+                  aboutPageContent.jeremyEvansPicture.fields.file.url ||
+                  "/placeholder.svg"
+                }
                 alt="Artist Portrait"
                 fill
                 className="object-cover"
@@ -106,11 +119,13 @@ export default function AboutPage() {
                 <p className="text-lg text-gray-700">
                   {aboutPageContent.about}
                 </p>
-
-              
               </div>
 
-              <Button asChild variant="outline" className="self-start mt-8 border-gray-300 hover:bg-gray-50">
+              <Button
+                asChild
+                variant="outline"
+                className="self-start mt-8 border-gray-300 hover:bg-gray-50"
+              >
                 <Link href="/contact">Get in Touch</Link>
               </Button>
             </div>
@@ -118,40 +133,128 @@ export default function AboutPage() {
 
           {/* Timeline with Animation */}
           <div ref={timelineRef} className="relative">
-            <div className="absolute left-1/2 h-full w-px bg-gray-200 transform -translate-x-1/2 z-0"></div>
-            <div className="absolute left-1/2 h-0 w-1 bg-gray-800 transform -translate-x-1/2 transition-all duration-300 ease-out timeline-progress z-0"></div>
+            {/* Timeline center line - responsive positioning */}
+            <div className="absolute md:left-1/2 left-[20px] h-full w-px bg-gray-200 transform md:-translate-x-1/2 z-0"></div>
+            <div className="absolute md:left-1/2 left-[20px] h-0 w-1 bg-gray-800 transform md:-translate-x-1/2 transition-all duration-300 ease-out timeline-progress z-0"></div>
 
-            {timelineEvents.map((event:any, index:any) => (
+            {timelineEvents.map((event: any, index: any) => (
               <div
                 key={index}
-                className={`relative mb-16 timeline-item opacity-0 transition-all duration-700 ease-out z-10 ${
-                  index % 2 === 0 ? "translate-x-8" : "-translate-x-8"
+                className={`timeline-event relative mb-16 z-10 transition-all duration-1000 ease-out ${
+                  visibleEvents.has(index)
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-8"
                 }`}
+                data-event-index={index}
+                style={{
+                  transitionDelay: `${index * 100}ms`, // Stagger the animations
+                }}
               >
-                <div className="absolute left-1/2 w-4 h-4 bg-white border-2 border-gray-300 rounded-full transform -translate-x-1/2 transition-all duration-500 hover:border-gray-800 hover:scale-125 z-20"></div>
+                {/* Timeline dot - responsive positioning */}
+                <div
+                  className={`absolute md:left-1/2 left-[20px] w-4 h-4 bg-white border-2 border-gray-300 rounded-full transform md:-translate-x-1/2 -translate-x-1/2 transition-all duration-500 hover:border-gray-800 hover:scale-125 z-20 ${
+                    visibleEvents.has(index)
+                      ? "scale-100 opacity-100"
+                      : "scale-75 opacity-60"
+                  }`}
+                ></div>
 
-                <div className={`flex items-center ${index % 2 === 0 ? "flex-row-reverse" : ""}`}>
-                  <div className={`w-1/2 ${index % 2 === 0 ? "pr-12 text-right" : "pl-12"}`}>
-                    <div className="inline-block px-3 py-1 mb-2 text-xs font-medium text-gray-600 bg-gray-100 rounded-full">
+                {/* Content container - responsive layout */}
+                <div
+                  className={`flex items-start ${
+                    index % 2 === 0 ? "md:flex-row-reverse" : ""
+                  }`}
+                >
+                  {/* Content box - responsive width and positioning */}
+                  <div
+                    className={`md:w-1/2 w-full pl-12 md:pr-0 ${
+                      index % 2 === 0
+                        ? "md:pr-12 md:text-right md:pl-0"
+                        : "md:pl-12"
+                    }`}
+                  >
+                    <div
+                      className={`inline-block px-3 py-1 mb-2 text-md font-medium text-gray-600 bg-gray-100 rounded-full transition-all duration-500 ${
+                        visibleEvents.has(index)
+                          ? "opacity-100 translate-y-0"
+                          : "opacity-0 translate-y-4"
+                      }`}
+                      style={{
+                        transitionDelay: `${index * 100 + 200}ms`,
+                      }}
+                    >
                       {event.year}
                     </div>
-                    <h3 className="text-xl font-medium text-gray-900">{event.title}</h3>
-                    <p className="mt-2 text-gray-600">{event.description}</p>
+
+                    <h3
+                      className={`text-xl font-medium text-gray-900 transition-all duration-500 ${
+                        visibleEvents.has(index)
+                          ? "opacity-100 translate-y-0"
+                          : "opacity-0 translate-y-4"
+                      }`}
+                      style={{
+                        transitionDelay: `${index * 100 + 300}ms`,
+                      }}
+                    >
+                      {event.title}
+                    </h3>
+
+                    <p
+                      className={`mt-2 text-gray-600 transition-all duration-500 ${
+                        visibleEvents.has(index)
+                          ? "opacity-100 translate-y-0"
+                          : "opacity-0 translate-y-4"
+                      }`}
+                      style={{
+                        transitionDelay: `${index * 100 + 400}ms`,
+                      }}
+                    >
+                      {event.description}
+                    </p>
 
                     {event.image && (
-                      <div className="relative mt-4 mx-2 overflow-hidden rounded-md aspect-video">
-                        <Image
-                          src={event.image || "/placeholder.svg"}
-                          alt={event.title}
-                          fill
-                          className="object-cover"
-                        />
+                      <div
+                        className={`relative mt-4 overflow-hidden rounded-md transition-all duration-1000 ${
+                          index % 2 === 0 ? "md:ml-auto" : "md:mr-auto"
+                        } ${
+                          visibleEvents.has(index)
+                            ? "opacity-100 translate-y-0 scale-100"
+                            : "opacity-0 translate-y-6 scale-95"
+                        }`}
+                        style={{
+                          transitionDelay: `${index * 100 + 500}ms`,
+                        }}
+                      >
+                        <div
+                          className={`max-h-[600px] ${
+                            index % 2 === 0 ? "md:text-right" : "md:text-left"
+                          }`}
+                        >
+                          <Image
+                            src={event.image || "/placeholder.svg"}
+                            alt={event.title}
+                            width={500}
+                            height={400}
+                            className={`object-contain w-full max-w-[500px] h-auto max-h-[600px] ${
+                              index % 2 === 0 ? "md:ml-auto" : "md:mr-auto"
+                            }`}
+                          />
+                        </div>
                       </div>
                     )}
 
                     {event.details && (
-                      <ul className="mt-3 space-y-1">
-                        {event.details.map((detail:any, i:any) => (
+                      <ul
+                        className={`mt-3 space-y-1 transition-all duration-500 ${
+                          visibleEvents.has(index)
+                            ? "opacity-100 translate-y-0"
+                            : "opacity-0 translate-y-4"
+                        }`}
+                        style={{
+                          transitionDelay: `${index * 100 + 600}ms`,
+                        }}
+                      >
+                        {event.details.map((detail: any, i: any) => (
                           <li key={i} className="text-sm text-gray-500">
                             {detail}
                           </li>
@@ -166,117 +269,28 @@ export default function AboutPage() {
 
           {/* Artist Statement */}
           <div className="max-w-3xl mx-auto mt-24 p-8 bg-gray-50">
-            <h2 className="text-2xl font-light text-gray-900">Artist Statement</h2>
+            <h2 className="text-2xl font-light text-gray-900">
+              Artist Statement
+            </h2>
             <div className="mt-6 prose">
-              <p>
-                My work investigates the intersection of [theme/concept] and [theme/concept], exploring how [specific
-                aspect of your practice] can [what it reveals or accomplishes]. Through a process of [your process], I
-                create [description of your work] that [what it does or means].
-              </p>
-              <p>
-                I am particularly interested in [specific interest], which stems from [personal experience or
-                theoretical framework]. This interest has led me to develop a visual language that [description of your
-                visual approach].
-              </p>
-              <p>
-                In my current body of work, I am exploring [current focus], using [medium/technique] to [what you're
-                trying to achieve]. This exploration has allowed me to [what you've discovered or developed].
-              </p>
+              {aboutPageContent.artistStatement
+                .split("\n\n")
+                .map((paragraph: string, pIndex: number) => (
+                  <p key={pIndex} className="mb-4">
+                    {paragraph
+                      .split("\n")
+                      .map((line: string, lIndex: number) => (
+                        <span key={lIndex}>
+                          {line}
+                          {lIndex < paragraph.split("\n").length - 1 && <br />}
+                        </span>
+                      ))}
+                  </p>
+                ))}
             </div>
-          </div>
-
-          {/* CV Download */}
-          <div className="mt-24 text-center">
-            <h2 className="text-2xl font-light text-gray-900">Curriculum Vitae</h2>
-            <p className="mt-2 text-gray-500">A complete CV is available for download</p>
-            <Button variant="outline" className="mt-4 border-gray-300 hover:bg-gray-50">
-              Download CV (PDF)
-            </Button>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
-
-const events = [
-  {
-    year: "2024",
-    title: "Upcoming Exhibition: 'New Horizons'",
-    description: "A preview of my upcoming solo exhibition exploring themes of transition and renewal.",
-    image: "/placeholder.svg?height=400&width=600",
-    details: ["Gallery Space, City, Country", "Opening: Spring 2024"],
-  },
-  {
-    year: "2023",
-    title: "Solo Exhibition: 'Title of Exhibition'",
-    description: "Description of the exhibition, its themes, and significance in your artistic development.",
-    image: "/placeholder.svg?height=400&width=600",
-    details: ["Gallery Name, City, Country", "Curator: Curator Name"],
-  },
-  {
-    year: "2022",
-    title: "International Art Fair",
-    description: "Participated in a prestigious international art fair, showcasing new works to a global audience.",
-    details: ["Art Fair Name, City, Country", "Represented by: Gallery Name"],
-  },
-  {
-    year: "2021",
-    title: "Artist Residency",
-    description:
-      "Details about the residency program, what you created during this time, and how it influenced your work.",
-    image: "/placeholder.svg?height=400&width=600",
-    details: ["Residency Program Name, Location", "Duration: 3 months"],
-  },
-  {
-    year: "2020",
-    title: "Group Exhibition: 'Collective Visions'",
-    description: "A collaborative exhibition exploring shared themes across different artistic practices.",
-    details: ["Museum Name, City, Country", "Curator: Curator Name"],
-  },
-  {
-    year: "2019",
-    title: "MFA in Fine Arts",
-    description: "Information about your graduate studies, thesis project, and key learnings.",
-    details: ["University Name, City, Country", "Thesis: 'Title of Thesis'", "Advisor: Professor Name"],
-  },
-  {
-    year: "2018",
-    title: "Publication Feature",
-    description: "Featured in a prominent art publication, with an in-depth interview about your practice.",
-    image: "/placeholder.svg?height=400&width=600",
-    details: ["Publication Name", "Issue: Month/Year"],
-  },
-  {
-    year: "2017",
-    title: "First Group Exhibition",
-    description: "Details about your first significant exhibition, the work you presented, and its reception.",
-    image: "/placeholder.svg?height=400&width=600",
-    details: ["Exhibition Title, Gallery Name, City", "Curator: Curator Name"],
-  },
-  {
-    year: "2016",
-    title: "Artist Grant Recipient",
-    description: "Received a prestigious grant to support the development of a new body of work.",
-    details: ["Grant Name", "Awarding Institution"],
-  },
-  {
-    year: "2015",
-    title: "BFA in Studio Art",
-    description: "Information about your undergraduate studies, focus areas, and formative experiences.",
-    details: ["University Name, City, Country", "Concentration: Medium/Focus"],
-  },
-  {
-    year: "2014",
-    title: "First Commission",
-    description: "Details about your first commissioned work and the experience of creating it.",
-    image: "/placeholder.svg?height=400&width=600",
-    details: ["Client/Institution", "Medium and Dimensions"],
-  },
-  {
-    year: "2012",
-    title: "Artistic Beginnings",
-    description: "The story of how you began your artistic journey, early influences, and pivotal moments.",
-    image: "/placeholder.svg?height=400&width=600",
-  },
-]

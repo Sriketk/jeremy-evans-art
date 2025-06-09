@@ -1,7 +1,7 @@
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 export default function ContactPage() {
   return (
@@ -19,7 +19,11 @@ export default function ContactPage() {
                 <Label htmlFor="name" className="text-gray-700">
                   Name
                 </Label>
-                <Input id="name" placeholder="Your name" className="border-gray-300 focus-visible:ring-gray-400" />
+                <Input
+                  id="name"
+                  placeholder="Your name"
+                  className="border-gray-300 focus-visible:ring-gray-400"
+                />
               </div>
 
               <div className="space-y-2">
@@ -57,59 +61,77 @@ export default function ContactPage() {
                 />
               </div>
 
-              <Button type="submit" variant="outline" className="border-gray-300 hover:bg-gray-50">
+              <Button
+                type="submit"
+                variant="outline"
+                className="border-gray-300 hover:bg-gray-50"
+              >
                 Send Message
               </Button>
             </form>
           </div>
 
           <div>
-            <h2 className="text-2xl font-light text-gray-900">Contact Information</h2>
+            <h2 className="text-2xl font-light text-gray-900">
+              Contact Information
+            </h2>
 
             <div className="mt-6 space-y-6">
               <div>
                 <h3 className="text-base font-medium text-gray-900">Email</h3>
                 <p className="mt-1 text-gray-600">
-                  <a href="mailto:artist@example.com" className="hover:underline">
-                    jeremyevans@gmail.com
+                  <a
+                    href="mailto:artist@example.com"
+                    className="hover:underline"
+                  >
+                    jeremyevansart@gmail.com
                   </a>
                 </p>
               </div>
 
               <div>
                 <h3 className="text-base font-medium text-gray-900">Studio</h3>
-                <p className="mt-1 text-gray-600">
-                  By appointment only
-                  <br />
-                  123 Studio Street
-                  <br />
-                  City, State 12345
-                </p>
+                <p className="mt-1 text-gray-600">By appointment only</p>
               </div>
 
               <div>
-                <h3 className="text-base font-medium text-gray-900">Representation</h3>
+                <h3 className="text-base font-medium text-gray-900">
+                  Instagram
+                </h3>
                 <p className="mt-1 text-gray-600">
-                  Gallery Name
-                  <br />
                   <a
-                    href="https://www.gallery-website.com"
+                    href="https://www.instagram.com/evansart21/?hl=en"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:underline"
                   >
-                    www.gallery-website.com
+                    @evansart21
                   </a>
-                  <br />
-                  gallery@example.com
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-base font-medium text-gray-900">
+                  Facebook
+                </h3>
+                <p className="mt-1 text-gray-600">
+                  <a
+                    href="https://www.facebook.com/jeremy.evans.5055/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline"
+                  >
+                    Jeremy Evans
+                  </a>
                 </p>
               </div>
             </div>
 
-            <div className="mt-12">
+            <div className="mt-8">
               <h2 className="text-2xl font-light text-gray-900">Commissions</h2>
               <p className="mt-2 text-gray-600">
-                I am available for select commission work. Please include the following information in your inquiry:
+                I am available for select commission work. Please include the
+                following information in your inquiry:
               </p>
               <ul className="mt-4 ml-5 space-y-2 text-gray-600 list-disc">
                 <li>Desired size and medium</li>
@@ -118,26 +140,12 @@ export default function ContactPage() {
                 <li>Any specific themes or references</li>
               </ul>
               <p className="mt-4 text-gray-600">
-                Commission pricing varies based on size, medium, and complexity. I typically require a 50% deposit to
-                begin work.
+                Commission pricing varies based on size, medium, and complexity.
               </p>
-            </div>
-
-            <div className="mt-12">
-              <h2 className="text-2xl font-light text-gray-900">Newsletter</h2>
-              <p className="mt-2 text-gray-600">
-                Sign up to receive updates about new work, exhibitions, and studio news.
-              </p>
-              <div className="flex mt-4 space-x-4">
-                <Input placeholder="Your email address" className="border-gray-300 focus-visible:ring-gray-400" />
-                <Button variant="outline" className="border-gray-300 hover:bg-gray-50">
-                  Subscribe
-                </Button>
-              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

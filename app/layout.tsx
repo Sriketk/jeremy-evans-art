@@ -5,7 +5,12 @@ import Image from "next/image";
 import { ThemeProvider } from "@/components/theme-provider";
 import * as contentful from "contentful";
 import { HomeContextProvider } from "@/app/lib/context/homeContextProvider";
-import { getAboutPageContent, getHomePageContent } from "@/app/lib/contentful/api";
+import {siInstagram, siFacebook, siGmail} from 'simple-icons';
+
+import {
+  getAboutPageContent,
+  getHomePageContent,
+} from "@/app/lib/contentful/api";
 
 // Primary font for body text
 const montserrat = Montserrat({
@@ -95,7 +100,10 @@ export default async function RootLayout({
             </div>
           </header>
           <main className="flex-1">
-            <HomeContextProvider homePageContent={ homePageContent } aboutPageContent = {aboutPageContent}>
+            <HomeContextProvider
+              homePageContent={homePageContent}
+              aboutPageContent={aboutPageContent}
+            >
               {children}
             </HomeContextProvider>
           </main>
@@ -108,21 +116,36 @@ export default async function RootLayout({
                 <div className="flex space-x-6">
                   <Link
                     href="https://www.instagram.com/evansart21/?hl=en"
-                    className="text-sm text-gray-500 hover:text-gray-900"
+                    className="text-gray-500 hover:text-gray-900"
+                    target="_blank"
                   >
-                    Instagram
+                    <div
+                      dangerouslySetInnerHTML={{ __html: siInstagram.svg }}
+                      className="w-6 h-6"
+                      style={{ fill: 'currentColor' }}
+                    />
                   </Link>
                   <Link
                     href="https://www.facebook.com/jeremy.evans.5055/"
-                    className="text-sm text-gray-500 hover:text-gray-900"
+                    className="text-gray-500 hover:text-gray-900"
+                    target="_blank"
                   >
-                    Facebook
+                    <div
+                      dangerouslySetInnerHTML={{ __html: siFacebook.svg }}
+                      className="w-6 h-6"
+                      style={{ fill: 'currentColor' }}
+                    />
                   </Link>
                   <Link
-                    href="jeremyevans@gmail.com"
-                    className="text-sm text-gray-500 hover:text-gray-900"
+                    href="mailto:jeremyevansart@gmail.com"
+                    target="_blank"
+                    className="text-gray-500 hover:text-gray-900"
                   >
-                    Email
+                    <div
+                      dangerouslySetInnerHTML={{ __html: siGmail.svg }}
+                      className="w-6 h-6"
+                      style={{ fill: 'currentColor' }}
+                    />
                   </Link>
                 </div>
               </div>
