@@ -10,7 +10,7 @@ import { GalleryContent } from "@/app/lib/context/galleryContextProvider";
 
 function contentMapping(rawContent: any) {
   const resultArray: Artwork[] = [];
-  rawContent.forEach((image:any) => {
+  rawContent.forEach((image: any) => {
     resultArray.push({
       title: image.fields.title,
       description: image.fields.artDescription,
@@ -28,7 +28,7 @@ function contentMapping(rawContent: any) {
 
 function categoryArtMapping(rawContent: any) {
   const resultArray: Artwork[] = [];
-  Object.values(rawContent).forEach((artwork:any) => {
+  Object.values(rawContent).forEach((artwork: any) => {
     resultArray.push({
       title: artwork.title,
       description: artwork.artDescription,
@@ -49,6 +49,11 @@ export default function GalleryPage() {
   const allArt = galleryContent.allArtWork;
   const portraits = galleryContent.portraits;
   const shoes = galleryContent.shoes;
+  const woodWork = galleryContent.woodWork;
+  const vehicles = galleryContent.vehicles;
+  const sports = galleryContent.sports;
+  const controllrers = galleryContent.controllers;
+  const misc = galleryContent.misc;
 
   console.log(allArt);
   console.log(portraits);
@@ -56,6 +61,11 @@ export default function GalleryPage() {
   const allArtwork: Artwork[] = contentMapping(allArt);
   const shoeDisplay: Artwork[] = categoryArtMapping(shoes);
   const portraitDisplay: Artwork[] = categoryArtMapping(portraits);
+  const woodWorkDisplay: Artwork[] = categoryArtMapping(woodWork);
+  const vehicleDisplay: Artwork[] = categoryArtMapping(vehicles);
+  const sportsDisplay: Artwork[] = categoryArtMapping(sports);
+  const controllersDisplay: Artwork[] = categoryArtMapping(controllrers);
+  const miscDisplay: Artwork[] = categoryArtMapping(misc);
   console.log(portraitDisplay);
   console.log(shoeDisplay);
 
@@ -89,16 +99,35 @@ export default function GalleryPage() {
               Shoes
             </TabsTrigger>
             <TabsTrigger
-              value="mixed-media"
+              value="woodWork"
               className="rounded-none border-0 border-b-2 border-transparent data-[state=active]:border-gray-900 data-[state=active]:bg-transparent text-gray-500 data-[state=active]:text-gray-900 pb-2"
             >
-              Mixed Media
+              Wood Work
             </TabsTrigger>
             <TabsTrigger
-              value="digital"
+              value="vehicles"
               className="rounded-none border-0 border-b-2 border-transparent data-[state=active]:border-gray-900 data-[state=active]:bg-transparent text-gray-500 data-[state=active]:text-gray-900 pb-2"
             >
-              Digital
+              Vehicles
+            </TabsTrigger>
+
+            <TabsTrigger
+              value="sports"
+              className="rounded-none border-0 border-b-2 border-transparent data-[state=active]:border-gray-900 data-[state=active]:bg-transparent text-gray-500 data-[state=active]:text-gray-900 pb-2"
+            >
+              Sports
+            </TabsTrigger>
+            <TabsTrigger
+              value="controllers"
+              className="rounded-none border-0 border-b-2 border-transparent data-[state=active]:border-gray-900 data-[state=active]:bg-transparent text-gray-500 data-[state=active]:text-gray-900 pb-2"
+            >
+              Controllers
+            </TabsTrigger>
+            <TabsTrigger
+              value="misc"
+              className="rounded-none border-0 border-b-2 border-transparent data-[state=active]:border-gray-900 data-[state=active]:bg-transparent text-gray-500 data-[state=active]:text-gray-900 pb-2"
+            >
+              Misc
             </TabsTrigger>
           </TabsList>
 
@@ -126,23 +155,43 @@ export default function GalleryPage() {
             </div>
           </TabsContent>
 
-          <TabsContent value="mixed-media" className="mt-0">
+          <TabsContent value="vehicles" className="mt-0">
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
-              {allArtwork
-                .filter((artwork) => artwork.category === "Mixed Media")
-                .map((artwork) => (
-                  <ArtworkCard key={artwork.title} artwork={artwork} />
-                ))}
+              {vehicleDisplay.map((vehicle) => (
+                <ArtworkCard key={vehicle.title} artwork={vehicle} />
+              ))}
             </div>
           </TabsContent>
 
-          <TabsContent value="digital" className="mt-0">
+          <TabsContent value="woodWork" className="mt-0">
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
-              {allArtwork
-                .filter((artwork) => artwork.category === "Digital")
-                .map((artwork) => (
-                  <ArtworkCard key={artwork.title} artwork={artwork} />
-                ))}
+              {woodWorkDisplay.map((woodWork) => (
+                <ArtworkCard key={woodWork.title} artwork={woodWork} />
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="sports" className="mt-0">
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
+              {sportsDisplay.map((sport) => (
+                <ArtworkCard key={sport.title} artwork={sport} />
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="controllers" className="mt-0">
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
+              {controllersDisplay.map((controller) => (
+                <ArtworkCard key={controller.title} artwork={controller} />
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="misc" className="mt-0">
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
+              {miscDisplay.map((misc) => (
+                <ArtworkCard key={misc.title} artwork={misc} />
+              ))}
             </div>
           </TabsContent>
         </Tabs>

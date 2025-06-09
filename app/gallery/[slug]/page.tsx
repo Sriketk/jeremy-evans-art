@@ -17,12 +17,27 @@ export default function ArtworkDetailPage() {
   const allArt = galleryContent.allArtWork;
   const portraits = galleryContent.portraits;
   const shoes = galleryContent.shoes;
-  console.log(portraits["beach_house"]);
-  let artwork:any;
+  const woodWork = galleryContent.woodWork;
+  const vehicles = galleryContent.vehicles;
+  const sports = galleryContent.sports;
+  const controllers = galleryContent.controllers;
+  const misc = galleryContent.misc;
+
+  let artwork: any;
   if (portraits[slug]) {
     artwork = portraits[slug];
   } else if (shoes[slug]) {
     artwork = shoes[slug];
+  } else if (woodWork[slug]) {
+    artwork = woodWork[slug];
+  } else if (vehicles[slug]) {
+    artwork = vehicles[slug];
+  } else if (sports[slug]) {
+    artwork = sports[slug];
+  } else if (controllers[slug]) {
+    artwork = controllers[slug];
+  } else if (misc[slug]) {
+    artwork = misc[slug];
   }
 
   console.log(artwork);
