@@ -71,7 +71,7 @@ export default function ContactPage() {
                 <h3 className="text-base font-medium text-gray-900">Email</h3>
                 <p className="mt-1 text-gray-600">
                   <a href="mailto:artist@example.com" className="hover:underline">
-                    artist@example.com
+                    jeremyevans@gmail.com
                   </a>
                 </p>
               </div>

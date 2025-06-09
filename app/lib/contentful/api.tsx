@@ -1,5 +1,5 @@
 import { createContentfulClient } from "./client";
-import { HOME_PAGE_CONTENT_ID, GALLERY_CONTENT_ID, PORTRAITS_CONTENT_ID, SHOES_CONTENT_ID} from "./constants";
+import { HOME_PAGE_CONTENT_ID, GALLERY_CONTENT_ID, PORTRAITS_CONTENT_ID, SHOES_CONTENT_ID, ABOUT_PAGE_ID} from "./constants";
 
 export async function getHomePageContent() {
   const client = await createContentfulClient();
@@ -23,6 +23,12 @@ export async function getShoesContent(){
   const client = await createContentfulClient();
   const entry = await client.getEntries({'content_type': SHOES_CONTENT_ID});
   return entry.items;
+}
+
+export async function getAboutPageContent(){
+  const client = await createContentfulClient();
+  const entry = await client.getEntry(ABOUT_PAGE_ID);
+  return entry.fields;
 }
 
 

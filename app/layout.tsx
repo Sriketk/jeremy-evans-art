@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ThemeProvider } from "@/components/theme-provider";
 import * as contentful from "contentful";
 import { HomeContextProvider } from "@/app/lib/context/homeContextProvider";
-import { getHomePageContent } from "@/app/lib/contentful/api";
+import { getAboutPageContent, getHomePageContent } from "@/app/lib/contentful/api";
 
 // Primary font for body text
 const montserrat = Montserrat({
@@ -33,6 +33,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const homePageContent = await getHomePageContent();
+  const aboutPageContent = await getAboutPageContent();
 
   console.log(homePageContent);
   return (
@@ -94,7 +95,7 @@ export default async function RootLayout({
             </div>
           </header>
           <main className="flex-1">
-            <HomeContextProvider homePageContent={{ homePageContent }}>
+            <HomeContextProvider homePageContent={ homePageContent } aboutPageContent = {aboutPageContent}>
               {children}
             </HomeContextProvider>
           </main>
@@ -106,19 +107,19 @@ export default async function RootLayout({
                 </div>
                 <div className="flex space-x-6">
                   <Link
-                    href="#"
+                    href="https://www.instagram.com/evansart21/?hl=en"
                     className="text-sm text-gray-500 hover:text-gray-900"
                   >
                     Instagram
                   </Link>
                   <Link
-                    href="#"
+                    href="https://www.facebook.com/jeremy.evans.5055/"
                     className="text-sm text-gray-500 hover:text-gray-900"
                   >
-                    LinkedIn
+                    Facebook
                   </Link>
                   <Link
-                    href="mailto:artist@example.com"
+                    href="jeremyevans@gmail.com"
                     className="text-sm text-gray-500 hover:text-gray-900"
                   >
                     Email

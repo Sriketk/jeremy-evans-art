@@ -1,12 +1,29 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useContext } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { HomeContext } from "../lib/context/homeContextProvider"
+import { describe } from "node:test"
+
 
 export default function AboutPage() {
   const timelineRef = useRef(null)
+  const {aboutPageContent} = useContext(HomeContext)
+  console.log(aboutPageContent)
+
+
+  const timelineEvents:any = []
+
+  aboutPageContent.timelineEvents.forEach((timeLineEvent:any) => {
+    timelineEvents.push({
+      year: timeLineEvent.fields.year,
+      title: timeLineEvent.fields.title,
+      description: timeLineEvent.fields.description,
+      image: timeLineEvent.fields?.image?.fields.file.url
+    });
+  });
 
   useEffect(() => {
     // Animation for timeline items when they come into view
@@ -76,7 +93,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 gap-16 mb-24 lg:grid-cols-2">
             <div className="relative aspect-[3/4]">
               <Image
-                src="/placeholder.svg?height=900&width=600"
+                src={aboutPageContent.jeremyEvansPicture.fields.file.url}
                 alt="Artist Portrait"
                 fill
                 className="object-cover"
@@ -87,19 +104,10 @@ export default function AboutPage() {
             <div className="flex flex-col justify-center">
               <div className="prose max-w-none">
                 <p className="text-lg text-gray-700">
-                  I am a [nationality] artist based in [location], working across various media including painting,
-                  drawing, and mixed media installation.
+                  {aboutPageContent.about}
                 </p>
 
-                <p className="text-gray-700">
-                  My practice explores the relationship between [theme 1] and [theme 2], examining how [specific aspect
-                  of your work] can reveal [insight or perspective].
-                </p>
-
-                <p className="text-gray-700">
-                  In my current body of work, I am investigating [current focus or project], using [techniques or
-                  approaches] to explore [themes or questions].
-                </p>
+              
               </div>
 
               <Button asChild variant="outline" className="self-start mt-8 border-gray-300 hover:bg-gray-50">
@@ -113,7 +121,7 @@ export default function AboutPage() {
             <div className="absolute left-1/2 h-full w-px bg-gray-200 transform -translate-x-1/2 z-0"></div>
             <div className="absolute left-1/2 h-0 w-1 bg-gray-800 transform -translate-x-1/2 transition-all duration-300 ease-out timeline-progress z-0"></div>
 
-            {timelineEvents.map((event, index) => (
+            {timelineEvents.map((event:any, index:any) => (
               <div
                 key={index}
                 className={`relative mb-16 timeline-item opacity-0 transition-all duration-700 ease-out z-10 ${
@@ -143,7 +151,7 @@ export default function AboutPage() {
 
                     {event.details && (
                       <ul className="mt-3 space-y-1">
-                        {event.details.map((detail, i) => (
+                        {event.details.map((detail:any, i:any) => (
                           <li key={i} className="text-sm text-gray-500">
                             {detail}
                           </li>
@@ -191,7 +199,7 @@ export default function AboutPage() {
   )
 }
 
-const timelineEvents = [
+const events = [
   {
     year: "2024",
     title: "Upcoming Exhibition: 'New Horizons'",

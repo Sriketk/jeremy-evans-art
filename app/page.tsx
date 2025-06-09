@@ -18,7 +18,8 @@ export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
 
   const featuredArtwork: Artwork[] = [];
-  const images = homePageContent.homePageImages;
+  const images = homePageContent['homePageImages'];
+  console.log(images)
   images.forEach((image: HomePageContent["homePageImages"][0]) => {
     featuredArtwork.push({
       title: image.fields.title,
