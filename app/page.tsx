@@ -12,7 +12,6 @@ import type { HomePageContent, Artwork } from "@/app/lib/types"
 
 export default function Home() {
   const { homePageContent } = useContext(HomeContext)
-  console.log(homePageContent)
   const isMobile = useMobile()
   const galleryRef = useRef(null)
   const [isVisible, setIsVisible] = useState(false)
@@ -20,8 +19,7 @@ export default function Home() {
 
   const featuredArtwork: Artwork[] = []
   const images = homePageContent["homePageImages"]
-  console.log(images)
-  images.forEach((image: HomePageContent["homePageImages"][0]) => {
+  images.forEach((image: any) => {
     featuredArtwork.push({
       title: image.fields.title,
       description: image.fields.artDescription,
@@ -32,10 +30,10 @@ export default function Home() {
         .replace(/\s+/g, "_") // Replace one or more whitespace characters with underscore
         .toLowerCase(),
       about: image.fields.aboutThisWork,
+      relatedWork: image.fields.relatedWork
     })
   })
 
-  console.log(homePageContent.homePageImages)
 
   useEffect(() => {
     // Trigger entrance animations

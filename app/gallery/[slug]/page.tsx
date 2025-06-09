@@ -40,7 +40,6 @@ export default function ArtworkDetailPage() {
     artwork = misc[slug];
   }
 
-  console.log(artwork);
 
   // In a real application, you would fetch the artwork data based on the slug
   // For this example, we'll find it in our mock data

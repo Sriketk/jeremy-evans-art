@@ -24,6 +24,7 @@ export default async function galleryLayout({
   const controllersData = await getControllersContent();
   const miscData = await getMiscContent();
 
+
   function transformData(data: any[]) {
     const transformedData: Record<
       string,
@@ -33,6 +34,7 @@ export default async function galleryLayout({
         url: string;
         year: number;
         aboutThisWork: string;
+        relatedWork: any;
       }
     > = {};
 
@@ -48,6 +50,7 @@ export default async function galleryLayout({
         url: art.image.fields.file.url,
         year: art.year,
         aboutThisWork: art.aboutThisWork,
+        relatedWork: art.relatedWork,
       };
     });
 
@@ -60,7 +63,6 @@ export default async function galleryLayout({
   const vehicles = transformData(vehiclesData);
   const controllers = transformData(controllersData);
   const misc = transformData(miscData);
-
   return (
     <GalleryContentContextProvider
       allArtWork={allArt}

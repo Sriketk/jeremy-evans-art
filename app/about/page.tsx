@@ -1,18 +1,21 @@
-"use client";
+"use client"
 
-import { useEffect, useRef, useContext, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { HomeContext } from "../lib/context/homeContextProvider";
+import { useEffect, useRef, useContext, useState } from "react"
+import Image from "next/image"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { HomeContext } from "../lib/context/homeContextProvider"
 
 export default function AboutPage() {
-  const timelineRef = useRef(null);
-  const { aboutPageContent } = useContext(HomeContext);
-  const [visibleEvents, setVisibleEvents] = useState<Set<number>>(new Set());
-  console.log(aboutPageContent);
+  const timelineRef = useRef(null)
+  const introRef = useRef(null)
+  const statementRef = useRef(null)
+  const { aboutPageContent } = useContext(HomeContext)
+  const [visibleEvents, setVisibleEvents] = useState<Set<number>>(new Set())
+  const [introVisible, setIntroVisible] = useState(false)
+  const [statementVisible, setStatementVisible] = useState(false)
 
-  const timelineEvents: any = [];
+  const timelineEvents: any = []
 
   aboutPageContent.timelineEvents.forEach((timeLineEvent: any) => {
     timelineEvents.push({
@@ -21,77 +24,107 @@ export default function AboutPage() {
       description: timeLineEvent.fields.description,
       image: timeLineEvent.fields?.image?.fields.file.url,
       details: timeLineEvent.fields.details,
-    });
-  });
+    })
+  })
 
   useEffect(() => {
     // Progress indicator animation
     const handleScroll = () => {
-      if (!timelineRef.current) return;
+      if (!timelineRef.current) return
 
-      const timelineEl = timelineRef.current;
-      const timelineRect = (timelineEl as HTMLElement).getBoundingClientRect();
-      const timelineTop = timelineRect.top;
-      const timelineHeight = timelineRect.height;
-      const windowHeight = window.innerHeight;
+      const timelineEl = timelineRef.current
+      const timelineRect = (timelineEl as HTMLElement).getBoundingClientRect()
+      const timelineTop = timelineRect.top
+      const timelineHeight = timelineRect.height
+      const windowHeight = window.innerHeight
 
       // Calculate how much of the timeline has been scrolled through
-      let progress = 0;
+      let progress = 0
       if (timelineTop <= windowHeight && timelineTop + timelineHeight >= 0) {
         // Calculate progress based on how much of the timeline is above the viewport
-        const scrolledPastTop = Math.max(0, windowHeight - timelineTop);
-        const totalScrollableHeight = timelineHeight + windowHeight;
-        progress = Math.min(
-          1,
-          Math.max(0, scrolledPastTop / totalScrollableHeight)
-        );
+        const scrolledPastTop = Math.max(0, windowHeight - timelineTop)
+        const totalScrollableHeight = timelineHeight + windowHeight
+        progress = Math.min(1, Math.max(0, scrolledPastTop / totalScrollableHeight))
       }
 
       // Update the progress line height
-      const progressLine = document.querySelector(".timeline-progress");
+      const progressLine = document.querySelector(".timeline-progress")
       if (progressLine) {
-        (progressLine as HTMLElement).style.height = `${progress * 100}%`;
+        ;(progressLine as HTMLElement).style.height = `${progress * 100}%`
       }
-    };
+    }
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll)
     // Initial call to set positions
-    handleScroll();
+    handleScroll()
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
 
   useEffect(() => {
     // Intersection Observer for timeline event animations
     const observerOptions = {
       threshold: 0.2, // Trigger when 20% of the element is visible
       rootMargin: "0px 0px -10% 0px", // Start animation slightly before element is fully in view
-    };
+    }
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        const eventIndex = Number.parseInt(
-          entry.target.getAttribute("data-event-index") || "0"
-        );
+        const eventIndex = Number.parseInt(entry.target.getAttribute("data-event-index") || "0")
 
         if (entry.isIntersecting) {
-          setVisibleEvents((prev) => new Set([...prev, eventIndex]));
+          setVisibleEvents((prev) => new Set([...prev, eventIndex]))
         }
-      });
-    }, observerOptions);
+      })
+    }, observerOptions)
 
     // Observe all timeline event elements
-    const eventElements = document.querySelectorAll(".timeline-event");
+    const eventElements = document.querySelectorAll(".timeline-event")
     eventElements.forEach((element) => {
-      observer.observe(element);
-    });
+      observer.observe(element)
+    })
 
     return () => {
-      observer.disconnect();
-    };
-  }, [timelineEvents.length]);
+      observer.disconnect()
+    }
+  }, [timelineEvents.length])
+
+  useEffect(() => {
+    // Intersection Observer for intro and statement sections
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: "0px 0px -5% 0px",
+    }
+
+    const introObserver = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setIntroVisible(true)
+        introObserver.disconnect()
+      }
+    }, observerOptions)
+
+    const statementObserver = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setStatementVisible(true)
+        statementObserver.disconnect()
+      }
+    }, observerOptions)
+
+    if (introRef.current) {
+      introObserver.observe(introRef.current)
+    }
+
+    if (statementRef.current) {
+      statementObserver.observe(statementRef.current)
+    }
+
+    return () => {
+      introObserver.disconnect()
+      statementObserver.disconnect()
+    }
+  }, [])
 
   return (
     <div className="min-h-screen bg-white">
@@ -100,13 +133,14 @@ export default function AboutPage() {
 
         <div className="mt-12">
           {/* Artist Intro */}
-          <div className="grid grid-cols-1 gap-16 mb-24 lg:grid-cols-2">
-            <div className="relative aspect-[3/4]">
+          <div ref={introRef} className="grid grid-cols-1 gap-16 mb-24 lg:grid-cols-2">
+            <div
+              className={`relative aspect-[3/4] transition-all duration-1000 ease-out ${
+                introVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              }`}
+            >
               <Image
-                src={
-                  aboutPageContent.jeremyEvansPicture.fields.file.url ||
-                  "/placeholder.svg"
-                }
+                src={aboutPageContent.jeremyEvansPicture.fields.file.url || "/placeholder.svg" || "/placeholder.svg"}
                 alt="Artist Portrait"
                 fill
                 className="object-cover"
@@ -115,16 +149,20 @@ export default function AboutPage() {
             </div>
 
             <div className="flex flex-col justify-center">
-              <div className="prose max-w-none">
-                <p className="text-lg text-gray-700">
-                  {aboutPageContent.about}
-                </p>
+              <div
+                className={`prose max-w-none transition-all duration-1000 ease-out delay-300 ${
+                  introVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+              >
+                <p className="text-lg text-gray-700">{aboutPageContent.about}</p>
               </div>
 
               <Button
                 asChild
                 variant="outline"
-                className="self-start mt-8 border-gray-300 hover:bg-gray-50"
+                className={`self-start mt-8 border-gray-300 hover:bg-gray-50 transition-all duration-1000 ease-out delay-500 ${
+                  introVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
               >
                 <Link href="/contact">Get in Touch</Link>
               </Button>
@@ -141,43 +179,31 @@ export default function AboutPage() {
               <div
                 key={index}
                 className={`timeline-event relative mb-16 z-10 transition-all duration-1000 ease-out ${
-                  visibleEvents.has(index)
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
+                  visibleEvents.has(index) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 }`}
                 data-event-index={index}
                 style={{
                   transitionDelay: `${index * 100}ms`, // Stagger the animations
                 }}
               >
-                {/* Timeline dot - responsive positioning */}
+                {/* Timeline dot - responsive positioning - fixed alignment */}
                 <div
                   className={`absolute md:left-1/2 left-[20px] w-4 h-4 bg-white border-2 border-gray-300 rounded-full transform md:-translate-x-1/2 -translate-x-1/2 transition-all duration-500 hover:border-gray-800 hover:scale-125 z-20 ${
-                    visibleEvents.has(index)
-                      ? "scale-100 opacity-100"
-                      : "scale-75 opacity-60"
+                    visibleEvents.has(index) ? "scale-100 opacity-100" : "scale-75 opacity-60"
                   }`}
                 ></div>
 
                 {/* Content container - responsive layout */}
-                <div
-                  className={`flex items-start ${
-                    index % 2 === 0 ? "md:flex-row-reverse" : ""
-                  }`}
-                >
+                <div className={`flex items-start ${index % 2 === 0 ? "md:flex-row-reverse" : ""}`}>
                   {/* Content box - responsive width and positioning */}
                   <div
                     className={`md:w-1/2 w-full pl-12 md:pr-0 ${
-                      index % 2 === 0
-                        ? "md:pr-12 md:text-right md:pl-0"
-                        : "md:pl-12"
+                      index % 2 === 0 ? "md:pr-12 md:text-right md:pl-0" : "md:pl-12"
                     }`}
                   >
                     <div
                       className={`inline-block px-3 py-1 mb-2 text-md font-medium text-gray-600 bg-gray-100 rounded-full transition-all duration-500 ${
-                        visibleEvents.has(index)
-                          ? "opacity-100 translate-y-0"
-                          : "opacity-0 translate-y-4"
+                        visibleEvents.has(index) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                       }`}
                       style={{
                         transitionDelay: `${index * 100 + 200}ms`,
@@ -188,9 +214,7 @@ export default function AboutPage() {
 
                     <h3
                       className={`text-xl font-medium text-gray-900 transition-all duration-500 ${
-                        visibleEvents.has(index)
-                          ? "opacity-100 translate-y-0"
-                          : "opacity-0 translate-y-4"
+                        visibleEvents.has(index) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                       }`}
                       style={{
                         transitionDelay: `${index * 100 + 300}ms`,
@@ -201,9 +225,7 @@ export default function AboutPage() {
 
                     <p
                       className={`mt-2 text-gray-600 transition-all duration-500 ${
-                        visibleEvents.has(index)
-                          ? "opacity-100 translate-y-0"
-                          : "opacity-0 translate-y-4"
+                        visibleEvents.has(index) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                       }`}
                       style={{
                         transitionDelay: `${index * 100 + 400}ms`,
@@ -225,11 +247,7 @@ export default function AboutPage() {
                           transitionDelay: `${index * 100 + 500}ms`,
                         }}
                       >
-                        <div
-                          className={`max-h-[600px] ${
-                            index % 2 === 0 ? "md:text-right" : "md:text-left"
-                          }`}
-                        >
+                        <div className={`max-h-[600px] ${index % 2 === 0 ? "md:text-right" : "md:text-left"}`}>
                           <Image
                             src={event.image || "/placeholder.svg"}
                             alt={event.title}
@@ -246,9 +264,7 @@ export default function AboutPage() {
                     {event.details && (
                       <ul
                         className={`mt-3 space-y-1 transition-all duration-500 ${
-                          visibleEvents.has(index)
-                            ? "opacity-100 translate-y-0"
-                            : "opacity-0 translate-y-4"
+                          visibleEvents.has(index) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                         }`}
                         style={{
                           transitionDelay: `${index * 100 + 600}ms`,
@@ -268,29 +284,42 @@ export default function AboutPage() {
           </div>
 
           {/* Artist Statement */}
-          <div className="max-w-3xl mx-auto mt-24 p-8 bg-gray-50">
-            <h2 className="text-2xl font-light text-gray-900">
+          <div
+            ref={statementRef}
+            className={`max-w-3xl mx-auto mt-24 p-8 bg-gray-50 transition-all duration-1000 ease-out ${
+              statementVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+          >
+            <h2
+              className={`text-2xl font-light text-gray-900 transition-all duration-700 ease-out ${
+                statementVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
+            >
               Artist Statement
             </h2>
             <div className="mt-6 prose">
-              {aboutPageContent.artistStatement
-                .split("\n\n")
-                .map((paragraph: string, pIndex: number) => (
-                  <p key={pIndex} className="mb-4">
-                    {paragraph
-                      .split("\n")
-                      .map((line: string, lIndex: number) => (
-                        <span key={lIndex}>
-                          {line}
-                          {lIndex < paragraph.split("\n").length - 1 && <br />}
-                        </span>
-                      ))}
-                  </p>
-                ))}
+              {aboutPageContent.artistStatement.split("\n\n").map((paragraph: string, pIndex: number) => (
+                <p
+                  key={pIndex}
+                  className={`mb-4 transition-all duration-700 ease-out ${
+                    statementVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                  }`}
+                  style={{
+                    transitionDelay: `${pIndex * 150 + 200}ms`,
+                  }}
+                >
+                  {paragraph.split("\n").map((line: string, lIndex: number) => (
+                    <span key={lIndex}>
+                      {line}
+                      {lIndex < paragraph.split("\n").length - 1 && <br />}
+                    </span>
+                  ))}
+                </p>
+              ))}
             </div>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -26,6 +26,7 @@ export interface Artwork {
   category: string;
   slug: string;
   about: string;
+  relatedWork: any;
 }
 
 

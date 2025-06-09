@@ -37,7 +37,6 @@ export default async function RootLayout({
   const homePageContent = await getHomePageContent()
   const aboutPageContent = await getAboutPageContent()
 
-  console.log(homePageContent)
   return (
     <html lang="en">
       <body className={`${montserrat.variable} ${playfair.variable} font-sans`}>
