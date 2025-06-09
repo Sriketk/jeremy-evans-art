@@ -4,11 +4,11 @@ import { createContext, ReactNode } from "react";
 export const HomeContext = createContext<any>(null);
 
 export const HomeContextProvider = ({
-  value,
+  homePageContent,
   children,
 }: {
-  value: any;
+  homePageContent: any;
   children: ReactNode;
 }) => {
-  return <HomeContext.Provider value={value}>{children}</HomeContext.Provider>;
+  return <HomeContext.Provider value={homePageContent}>{children}</HomeContext.Provider>;
 };

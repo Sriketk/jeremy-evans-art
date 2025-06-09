@@ -1,18 +1,35 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
-
+import { useContext } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Artwork } from "@/app/lib/types";
+import { Slug } from "@/app/lib/context/slugContextProvider";
+import { GalleryContent } from "@/app/lib/context/galleryContextProvider";
 
+export default function ArtworkDetailPage() {
+  const slugContext = useContext(Slug);
+  const slug = slugContext.slug;
+  const galleryContent = useContext(GalleryContent);
+  const allArt = galleryContent.allArtWork;
+  const portraits = galleryContent.portraits;
+  const shoes = galleryContent.shoes;
+  console.log(portraits["beach_house"]);
+  let artwork:any;
+  if (portraits[slug]) {
+    artwork = portraits[slug];
+  } else if (shoes[slug]) {
+    artwork = shoes[slug];
+  }
 
-export default async function ArtworkDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+  console.log(artwork);
 
   // In a real application, you would fetch the artwork data based on the slug
   // For this example, we'll find it in our mock data
-  const artwork = allArtwork.find((art) => art.slug === slug) || allArtwork[0];
+  // const artwork = allArtwork.find((art) => art.slug === slug) || allArtwork[0];
 
   return (
     <div className="min-h-screen bg-white">
@@ -32,7 +49,7 @@ export default async function ArtworkDetailPage({ params }: { params: Promise<{ 
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
           <div className="relative">
             <Image
-              src={artwork.image || "/placeholder.svg"}
+              src={artwork.url || "/placeholder.svg"}
               alt={artwork.title}
               width={800}
               height={800}
@@ -53,7 +70,7 @@ export default async function ArtworkDetailPage({ params }: { params: Promise<{ 
             <div className="prose max-w-none">
               <p className="text-gray-700">{artwork.description}</p>
               <p className="text-gray-700">
-                {artwork.description ||
+                {artwork.artDescription ||
                   "Dimensions variable. Please inquire for availability and pricing."}
               </p>
 
@@ -61,16 +78,8 @@ export default async function ArtworkDetailPage({ params }: { params: Promise<{ 
                 About this Work
               </h3>
               <p className="text-gray-700">
-                {artwork.about ||
-                  `This piece is part of an ongoing exploration of ${
-                    artwork.theme || "form and space"
-                  }. 
-                The work emerged from a process of ${
-                  artwork.process || "layering and reduction"
-                }, 
-                creating a dialogue between ${
-                  artwork.elements || "structure and fluidity"
-                }.`}
+                {artwork.aboutThisWork ||
+                  `This piece is part of an ongoing exploration of `}
               </p>
             </div>
 

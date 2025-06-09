@@ -1,9 +1,65 @@
+"use client";
+
+import { useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Artwork } from "@/app/lib/types";
+import { Artwork, HomePageContent } from "@/app/lib/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getGalleryContent } from "@/app/lib/contentful/api";
+import { GalleryContent } from "@/app/lib/context/galleryContextProvider";
+
+function contentMapping(rawContent: any) {
+  const resultArray: Artwork[] = [];
+  rawContent.forEach((image:any) => {
+    resultArray.push({
+      title: image.fields.title,
+      description: image.fields.artDescription,
+      image: image.fields.image.fields.file.url,
+      year: image.fields.year,
+      category: "Portraits",
+      slug: image.fields.title
+        .replace(/\s+/g, "_") // Replace one or more whitespace characters with underscore
+        .toLowerCase(),
+      about: image.fields.aboutThisWork,
+    });
+  });
+  return resultArray;
+}
+
+function categoryArtMapping(rawContent: any) {
+  const resultArray: Artwork[] = [];
+  Object.values(rawContent).forEach((artwork:any) => {
+    resultArray.push({
+      title: artwork.title,
+      description: artwork.artDescription,
+      image: artwork.url,
+      year: artwork.year,
+      category: "Portraits",
+      slug: artwork.title
+        .replace(/\s+/g, "_") // Replace one or more whitespace characters with underscore
+        .toLowerCase(),
+      about: artwork.aboutThisWork,
+    });
+  });
+  return resultArray;
+}
 
 export default function GalleryPage() {
+  const galleryContent = useContext(GalleryContent);
+  const allArt = galleryContent.allArtWork;
+  const portraits = galleryContent.portraits;
+  const shoes = galleryContent.shoes;
+
+  console.log(allArt);
+  console.log(portraits);
+  console.log(shoes);
+  const allArtwork: Artwork[] = contentMapping(allArt);
+  const shoeDisplay: Artwork[] = categoryArtMapping(shoes);
+  const portraitDisplay: Artwork[] = categoryArtMapping(portraits);
+  console.log(portraitDisplay);
+  console.log(shoeDisplay);
+
+  console.log(galleryContent);
   return (
     <div className="min-h-screen bg-white">
       <div className="container px-4 py-16 mx-auto max-w-6xl">
@@ -27,10 +83,10 @@ export default function GalleryPage() {
               Painting
             </TabsTrigger>
             <TabsTrigger
-              value="drawing"
+              value="shoe"
               className="rounded-none border-0 border-b-2 border-transparent data-[state=active]:border-gray-900 data-[state=active]:bg-transparent text-gray-500 data-[state=active]:text-gray-900 pb-2"
             >
-              Drawing
+              Shoes
             </TabsTrigger>
             <TabsTrigger
               value="mixed-media"
@@ -49,28 +105,24 @@ export default function GalleryPage() {
           <TabsContent value="all" className="mt-0">
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
               {allArtwork.map((artwork) => (
-                <ArtworkCard key={artwork.id} artwork={artwork} />
+                <ArtworkCard key={artwork.title} artwork={artwork} />
               ))}
             </div>
           </TabsContent>
 
           <TabsContent value="painting" className="mt-0">
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
-              {allArtwork
-                .filter((artwork) => artwork.category === "Painting")
-                .map((artwork) => (
-                  <ArtworkCard key={artwork.id} artwork={artwork} />
-                ))}
+              {portraitDisplay.map((potrait) => (
+                <ArtworkCard key={potrait.title} artwork={potrait} />
+              ))}
             </div>
           </TabsContent>
 
-          <TabsContent value="drawing" className="mt-0">
+          <TabsContent value="shoe" className="mt-0">
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
-              {allArtwork
-                .filter((artwork) => artwork.category === "Drawing")
-                .map((artwork) => (
-                  <ArtworkCard key={artwork.id} artwork={artwork} />
-                ))}
+              {shoeDisplay.map((shoe) => (
+                <ArtworkCard key={shoe.title} artwork={shoe} />
+              ))}
             </div>
           </TabsContent>
 
@@ -79,7 +131,7 @@ export default function GalleryPage() {
               {allArtwork
                 .filter((artwork) => artwork.category === "Mixed Media")
                 .map((artwork) => (
-                  <ArtworkCard key={artwork.id} artwork={artwork} />
+                  <ArtworkCard key={artwork.title} artwork={artwork} />
                 ))}
             </div>
           </TabsContent>
@@ -89,7 +141,7 @@ export default function GalleryPage() {
               {allArtwork
                 .filter((artwork) => artwork.category === "Digital")
                 .map((artwork) => (
-                  <ArtworkCard key={artwork.id} artwork={artwork} />
+                  <ArtworkCard key={artwork.title} artwork={artwork} />
                 ))}
             </div>
           </TabsContent>
@@ -123,96 +175,3 @@ function ArtworkCard({ artwork }: { artwork: Artwork }) {
     </Link>
   );
 }
-
-const allArtwork = [
-  {
-    id: 1,
-    title: "Untitled No. 7",
-    slug: "untitled-no-7",
-    description: "Mixed media on canvas.",
-    image: "/placeholder.svg?height=600&width=600",
-    category: "Mixed Media",
-    year: "2023",
-    about: "Mixed media on canvas.",
-  },
-  {
-    id: 2,
-    title: "Composition in Blue",
-    slug: "composition-in-blue",
-    description: "Oil on canvas.",
-    image: "/placeholder.svg?height=600&width=600",
-    category: "Painting",
-    year: "2022",
-    about: "Oil on canvas.",
-  },
-  {
-    id: 3,
-    title: "Study of Light",
-    slug: "study-of-light",
-    description: "Charcoal and pastel on paper.",
-    image: "/placeholder.svg?height=600&width=600",
-    category: "Drawing",
-    year: "2023",
-    about: "Charcoal and pastel on paper.",
-  },
-  {
-    id: 4,
-    title: "Fragments",
-    slug: "fragments",
-    description: "Digital collage.",
-    image: "/placeholder.svg?height=600&width=600",
-    category: "Digital",
-    year: "2022",
-    about: "Digital collage.",
-  },
-  {
-    id: 5,
-    title: "Intersection",
-    slug: "intersection",
-    description: "Acrylic on panel.",
-    image: "/placeholder.svg?height=600&width=600",
-    category: "Painting",
-    year: "2023",
-    about: "Acrylic on panel.",
-  },
-  {
-    id: 6,
-    title: "Gesture Series #3",
-    slug: "gesture-series-3",
-    description: "Ink on paper.",
-    image: "/placeholder.svg?height=600&width=600",
-    category: "Drawing",
-    year: "2022",
-    about: "Ink on paper.",
-  },
-  {
-    id: 7,
-    title: "Spatial Construct",
-    slug: "spatial-construct",
-    description: "Mixed media installation, variable dimensions.",
-    image: "/placeholder.svg?height=600&width=600",
-    category: "Mixed Media",
-    year: "2023",
-    about: "Mixed media installation, variable dimensions.",
-  },
-  {
-    id: 8,
-    title: "Digital Landscape",
-    slug: "digital-landscape",
-    description: "Digital painting.",
-    image: "/placeholder.svg?height=600&width=600",
-    category: "Digital",
-    year: "2022",
-    about: "Digital painting.",
-  },
-  {
-    id: 9,
-    title: "Monochrome Study",
-    slug: "monochrome-study",
-    description: "Oil on linen.",
-    image: "/placeholder.svg?height=600&width=600",
-    category: "Painting",
-    year: "2023",
-    about: "Oil on linen.",
-  },
-];

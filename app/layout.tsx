@@ -94,7 +94,7 @@ export default async function RootLayout({
             </div>
           </header>
           <main className="flex-1">
-            <HomeContextProvider value={{ homePageContent }}>
+            <HomeContextProvider homePageContent={{ homePageContent }}>
               {children}
             </HomeContextProvider>
           </main>

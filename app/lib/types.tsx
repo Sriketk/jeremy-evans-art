@@ -13,7 +13,7 @@ export interface HomePageContent {
       year: string;
       category: string;
       slug: string;
-      about: string;
+      aboutThisWork: string;
     };
   }[];
 }

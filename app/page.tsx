@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import Image from "next/image"
-import { useEffect, useRef, useState, useContext } from "react"
-import { ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import useMobile from "@/hooks/use-mobile"
-import { HomeContext } from "@/app/lib/context/homeContextProvider"
-import MasonryGrid from "@/components/ui/masonry-grid"
-import { HomePageContent, Artwork } from "@/app/lib/types"
+import Link from "next/link";
+import Image from "next/image";
+import { useEffect, useRef, useState, useContext } from "react";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import useMobile from "@/hooks/use-mobile";
+import { HomeContext } from "@/app/lib/context/homeContextProvider";
+import MasonryGrid from "@/components/ui/masonry-grid";
+import { HomePageContent, Artwork } from "@/app/lib/types";
 
 export default function Home() {
-  const { homePageContent } = useContext(HomeContext)
-  console.log(homePageContent)
-  const isMobile = useMobile()
-  const galleryRef = useRef(null)
-  const [isVisible, setIsVisible] = useState(false)
+  const { homePageContent } = useContext(HomeContext);
+  console.log(homePageContent);
+  const isMobile = useMobile();
+  const galleryRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
 
-  const featuredArtwork: Artwork[] = []
-  const images = homePageContent.homePageImages
+  const featuredArtwork: Artwork[] = [];
+  const images = homePageContent.homePageImages;
   images.forEach((image: HomePageContent["homePageImages"][0]) => {
     featuredArtwork.push({
       title: image.fields.title,
@@ -26,18 +26,20 @@ export default function Home() {
       image: image.fields.image.fields.file.url,
       year: image.fields.year,
       category: "Portraits",
-      slug: image.fields.title,
-      about: image.fields.about,
-    })
-  })
+      slug: image.fields.title
+        .replace(/\s+/g, "_") // Replace one or more whitespace characters with underscore
+        .toLowerCase(),
+      about: image.fields.aboutThisWork,
+    });
+  });
 
-  console.log(homePageContent.homePageImages)
+  console.log(homePageContent.homePageImages);
 
   useEffect(() => {
     // Trigger entrance animations
-    const timer = setTimeout(() => setIsVisible(true), 300)
-    return () => clearTimeout(timer)
-  }, [])
+    const timer = setTimeout(() => setIsVisible(true), 300);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="min-h-screen bg-white overflow-hidden">
@@ -55,19 +57,25 @@ export default function Home() {
           {/* Artist name and title with staggered animation */}
           <div
             className={`mb-8 transition-all duration-1000 delay-300 ease-out ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              isVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-4"
             }`}
           >
             <h1 className="text-4xl font-medium tracking-tight text-gray-900 md:text-5xl mb-2">
               {homePageContent.name}
             </h1>
-            <p className="text-lg font-light text-gray-500">{homePageContent.occupationDescription}</p>
+            <p className="text-lg font-light text-gray-500">
+              {homePageContent.occupationDescription}
+            </p>
           </div>
 
           {/* Description with animation */}
           <p
             className={`max-w-2xl text-lg text-gray-600 mb-8 transition-all duration-1000 delay-500 ease-out ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              isVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-4"
             }`}
           >
             {homePageContent.aboutWebsite}
@@ -76,7 +84,9 @@ export default function Home() {
           {/* Action buttons with animation */}
           <div
             className={`flex gap-4 transition-all duration-1000 delay-700 ease-out ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              isVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-4"
             }`}
           >
             <Button
@@ -102,9 +112,14 @@ export default function Home() {
       {/* Enhanced Masonry Gallery */}
       <section ref={galleryRef} className="py-8 relative">
         <div className="container px-4 mx-auto max-w-6xl">
-          <MasonryGrid items={featuredArtwork} isVisible={isVisible} columns={isMobile ? 1 : 3} gap={16} />
+          <MasonryGrid
+            items={featuredArtwork}
+            isVisible={isVisible}
+            columns={isMobile ? 1 : 3}
+            gap={16}
+          />
         </div>
       </section>
     </div>
-  )
+  );
 }
