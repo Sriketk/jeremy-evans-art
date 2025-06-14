@@ -71,3 +71,4 @@ export async function getAboutPageContent() {
   const entry = await client.getEntry(ABOUT_PAGE_ID);
   return entry.fields;
 }
+

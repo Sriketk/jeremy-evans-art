@@ -12,7 +12,7 @@ import { getAboutPageContent, getHomePageContent } from "@/app/lib/contentful/ap
 // Primary font for body text
 const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["300", "400", "500", "600"], 
   variable: "--font-montserrat",
 })
 
@@ -38,7 +38,9 @@ export default async function RootLayout({
   const aboutPageContent = await getAboutPageContent()
 
   return (
+    
     <html lang="en">
+      <link rel="icon" href="/images/logo.jpeg" sizes="any" />
       <body className={`${montserrat.variable} ${playfair.variable} font-sans`}>
         {/* <ThemeProvider attribute="class" defaultTheme="light"> */}
         <div className="flex flex-col min-h-screen">
