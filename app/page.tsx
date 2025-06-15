@@ -78,11 +78,11 @@ export default function Home() {
       <section className="container px-4 mx-auto max-w-7xl">
         <div className="flex flex-col items-center text-center">
           <div
-            className={`relative w-[40rem] h-[40rem] -my-24 transition-all duration-1000 ease-out ${
+            className={`relative w-[40rem] h-[40rem] mt-5  -my-24 transition-all duration-1000 ease-out ${
               isVisible ? "opacity-100 scale-100" : "opacity-0 scale-75"
             }`}
           >
-            <Image src="/images/logo.jpeg" alt="JEART Logo" fill />
+            <Image src="/images/bng.png" alt="JEART Logo" fill />
           </div>
 
           {/* Artist name and title with staggered animation */}

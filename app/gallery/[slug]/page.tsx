@@ -19,7 +19,7 @@ export default function ArtworkDetailPage() {
   const shoes = galleryContent.shoes;
   const woodWork = galleryContent.woodWork;
   const vehicles = galleryContent.vehicles;
-  const sports = galleryContent.sports;
+  const balls = galleryContent.balls;
   const controllers = galleryContent.controllers;
   const misc = galleryContent.misc;
 
@@ -32,8 +32,8 @@ export default function ArtworkDetailPage() {
     artwork = woodWork[slug];
   } else if (vehicles[slug]) {
     artwork = vehicles[slug];
-  } else if (sports[slug]) {
-    artwork = sports[slug];
+  } else if (balls[slug]) {
+    artwork = balls[slug];
   } else if (controllers[slug]) {
     artwork = controllers[slug];
   } else if (misc[slug]) {

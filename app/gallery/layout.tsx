@@ -4,7 +4,7 @@ import {
   getGalleryContent,
   getWoodWorkContent,
   getVehiclesConent,
-  getSportsContent,
+  getBallsContent,
   getControllersContent,
   getMiscContent,
 } from "@/app/lib/contentful/api";
@@ -19,7 +19,7 @@ export default async function galleryLayout({
   const portraitsData = await getPortraitsContent();
   const shoesData = await getShoesContent();
   const woodWorkData = await getWoodWorkContent();
-  const sportsData = await getSportsContent();
+  const ballsData = await getBallsContent();
   const vehiclesData = await getVehiclesConent();
   const controllersData = await getControllersContent();
   const miscData = await getMiscContent();
@@ -59,7 +59,7 @@ export default async function galleryLayout({
   const portraits = transformData(portraitsData);
   const shoes = transformData(shoesData);
   const woodWork = transformData(woodWorkData);
-  const sports = transformData(sportsData);
+  const balls = transformData(ballsData);
   const vehicles = transformData(vehiclesData);
   const controllers = transformData(controllersData);
   const misc = transformData(miscData);
@@ -69,7 +69,7 @@ export default async function galleryLayout({
       portraits={portraits}
       shoes={shoes}
       woodWork={woodWork}
-      sports={sports}
+      balls={balls}
       vehicles={vehicles}
       controllers={controllers}
       misc={misc}

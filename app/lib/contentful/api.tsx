@@ -5,7 +5,7 @@ import {
   PORTRAITS_CONTENT_ID,
   SHOES_CONTENT_ID,
   ABOUT_PAGE_ID,
-  SPORTS_CONTENT_ID,
+  BALLS_CONTENT_ID,
   VEHICLES_CONTENT_ID,
   WOODWORK_CONTENT_ID,
   CONTROLLERS_CONTENT_ID,
@@ -41,10 +41,10 @@ export async function getShoesContent() {
   return entry.items;
 }
 
-export async function getSportsContent() {
+export async function getBallsContent() {
   await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
-  const entry = await client.getEntries({ content_type: SPORTS_CONTENT_ID });
+  const entry = await client.getEntries({ content_type: BALLS_CONTENT_ID });
   return entry.items;
 }
 

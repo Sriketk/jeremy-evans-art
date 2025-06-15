@@ -9,7 +9,7 @@ export const GalleryContentContextProvider = ({
   shoes,
   woodWork,
   vehicles,
-  sports,
+  balls,
   controllers,
   misc,
   children,
@@ -19,14 +19,14 @@ export const GalleryContentContextProvider = ({
   shoes: any;
   woodWork: any;
   vehicles: any;
-  sports: any;
+  balls: any;
   controllers:any;
   misc:any;
   children: ReactNode;
 }) => {
   return (
     <GalleryContent.Provider
-      value={{ allArtWork, portraits, shoes, woodWork, vehicles, sports, controllers, misc }}
+      value={{ allArtWork, portraits, shoes, woodWork, vehicles, balls, controllers, misc }}
     >
       {children}
     </GalleryContent.Provider>
