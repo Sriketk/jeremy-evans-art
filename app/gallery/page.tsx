@@ -20,7 +20,7 @@ export default function GalleryPage() {
   } = useContext(GalleryContent);
 
 
-  const [activeCategory, setActiveCategory] = useState("all");
+  const [activeCategory, setActiveCategory] = useState("portraits");
   const [visibleGalleryItems, setVisibleGalleryItems] = useState<Set<number>>(
     new Set()
   );
@@ -47,16 +47,6 @@ export default function GalleryPage() {
 
   // Prepare all artworks by category
   const allArtworks = {
-  
-    all: [
-      ...transformToArtwork(portraits, "Portraits"),
-      ...transformToArtwork(shoes, "Shoes"),
-      ...transformToArtwork(woodWork, "Wood Work"),
-      ...transformToArtwork(balls, "Balls"),
-      ...transformToArtwork(vehicles, "Vehicles"),
-      ...transformToArtwork(controllers, "Controllers"),
-      ...transformToArtwork(misc, "Miscellaneous"),
-    ],
     portraits: transformToArtwork(portraits, "Portraits"),
     shoes: transformToArtwork(shoes, "Shoes"),
     woodwork: transformToArtwork(woodWork, "Wood Work"),

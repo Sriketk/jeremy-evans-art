@@ -20,7 +20,7 @@ export default function GalleryNavigation({ categories, activeCategory, onCatego
   const isMobile = useMobile()
   const [isOpen, setIsOpen] = useState(false)
 
-  const activeLabel = categories.find((cat) => cat.key === activeCategory)?.label || "All Artwork"
+  const activeLabel = categories.find((cat) => cat.key === activeCategory)?.label || "Shoes"
 
   if (isMobile) {
     return (
