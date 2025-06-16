@@ -1,30 +1,25 @@
-# Art portfolio website
+# Jeremy Evans Art Portfolio
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+This project showcases the artwork of Jeremy Evans, built using an asynchronous framework and leveraging the Contentful Content Delivery API.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/sriketks-projects/v0-art-portfolio-website)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/q83eWnG3Gjs)
+The website is live at [jeremyevansart.com](https://www.jeremyevansart.com).
 
-## Overview
+## Installation
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+To install the necessary packages, use pnpm:
 
-## Deployment
+```bash
+pnpm i
+```
 
-Your project is live at:
+## Running the Site
 
-**[https://vercel.com/sriketks-projects/v0-art-portfolio-website](https://vercel.com/sriketks-projects/v0-art-portfolio-website)**
+To run the development server:
 
-## Build your app
+```bash
+pnpm dev
+```
 
-Continue building your app on:
+This project utilizes the Contentful JavaScript SDK to fetch content. For more information about the Contentful Delivery API, refer to the official documentation:
 
-**[https://v0.dev/chat/projects/q83eWnG3Gjs](https://v0.dev/chat/projects/q83eWnG3Gjs)**
-
-## How It Works
-
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+[Contentful Delivery API Documentation](https://www.contentful.com/developers/docs/references/content-delivery-api/#/introduction/collection-resources-and-pagination)
