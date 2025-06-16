@@ -40,7 +40,7 @@ export default async function RootLayout({
   return (
     
     <html lang="en">
-      <link rel="icon" href="/images/logo.jpeg" sizes="any" />
+      <link rel="icon" href="/images/bng.png" sizes="any" />
       <body className={`${montserrat.variable} ${playfair.variable} font-sans`}>
         {/* <ThemeProvider attribute="class" defaultTheme="light"> */}
         <div className="flex flex-col min-h-screen">
@@ -48,8 +48,8 @@ export default async function RootLayout({
             <div className="container px-4 mx-auto max-w-6xl">
               <div className="flex items-center justify-between">
                 <Link href="/" className="flex items-center">
-                  <div className="relative w-12 h-12">
-                    <Image src="/images/logo.jpeg" alt="JEART Logo" fill className="object-contain" priority />
+                  <div className="relative w-16 h-16">
+                    <Image src="/images/bng.png" alt="JEART Logo" fill className="object-contain" priority />
                   </div>
                 </Link>
 

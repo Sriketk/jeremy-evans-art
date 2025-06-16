@@ -82,7 +82,7 @@ export default function Home() {
               isVisible ? "opacity-100 scale-100" : "opacity-0 scale-75"
             }`}
           >
-            <Image src="/images/bng.png" alt="JEART Logo" fill />
+            <Image src="/images/logo.jpeg" alt="JEART Logo" fill />
           </div>
 
           {/* Artist name and title with staggered animation */}
