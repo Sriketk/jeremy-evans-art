@@ -10,7 +10,7 @@ export function NavigationMenu() {
   const toggleMenu = () => {
     setIsOpen(!isOpen)
   }
-
+  
   return (
     <>
       {/* Mobile menu button */}
