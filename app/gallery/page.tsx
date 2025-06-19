@@ -7,6 +7,8 @@ import MasonryGrid from "@/components/ui/masonry-grid";
 import useMobile from "@/hooks/use-mobile";
 import type { Artwork } from "@/app/lib/types";
 
+const LAST_CATEGORY_KEY = "lastGalleryCategory";
+
 export default function GalleryPage() {
   const {
     allArtWork,
@@ -19,21 +21,30 @@ export default function GalleryPage() {
     misc,
   } = useContext(GalleryContent);
 
+  // Initialize with localStorage value if available, otherwise default to "portraits"
+  const [activeCategory, setActiveCategory] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem(LAST_CATEGORY_KEY) || "portraits";
+    }
+    return "portraits";
+  });
 
-  const [activeCategory, setActiveCategory] = useState("portraits");
   const [visibleGalleryItems, setVisibleGalleryItems] = useState<Set<number>>(
     new Set()
   );
   const isMobile = useMobile();
+
+  // Save category to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem(LAST_CATEGORY_KEY, activeCategory);
+  }, [activeCategory]);
 
   // Transform your data structure to match the Artwork interface
   const transformToArtwork = (
     data: Record<string, any>,
     category: string
   ): Artwork[] => {
-    return Object.entries(data).map(([slug, item]) => (
-      {
-
+    return Object.entries(data).map(([slug, item]) => ({
       title: item.title,
       description: item.artDescription,
       image: item.url.startsWith("//") ? `https:${item.url}` : item.url,
@@ -55,7 +66,6 @@ export default function GalleryPage() {
     controllers: transformToArtwork(controllers, "Controllers"),
     misc: transformToArtwork(misc, "Miscellaneous"),
   };
-
 
   // Category configuration
   const categories = [
