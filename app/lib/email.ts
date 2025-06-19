@@ -101,20 +101,13 @@ export async function sendContactEmail({
 
   try {
     const { data, error } = await resend.emails.send({
-      from: "Jeremy Evans Art <sriketk5@gmail.com>",
+      from: "Jeremy Evans Art <onboarding@resend.dev>",
       to: "jeremyevansart@gmail.com",
       replyTo: email,
       subject: `Contact Form: ${subject}`,
-      html: createEmailHtml({ name, email, subject, message }),
+      html: createEmailHtml({ name, email, subject, message })
       // Include a text version for email clients that don't support HTML
-      text: `
-Name: ${name}
-Email: ${email}
-Subject: ${subject}
 
-Message:
-${message}
-      `,
     });
 
     if (error) {
