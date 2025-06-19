@@ -11,13 +11,24 @@ import {
   CONTROLLERS_CONTENT_ID,
   MISC_CONTENT_ID,
 } from "./constants";
+import { ContentfulResponseSchema } from "../types";
+import { z } from "zod";
 
 // TRICKING NEXT JS INTO NOT CACHING 
 export async function getHomePageContent() {
-  await fetch("https://example.com/trigger", { cache: "no-store" });
-  const client = await createContentfulClient();
-  const entry = await client.getEntry(HOME_PAGE_CONTENT_ID);
-  return entry.fields;
+  try {
+    await fetch("https://example.com/trigger", { cache: "no-store" });
+    const client = await createContentfulClient();
+    const entry = await client.getEntry(HOME_PAGE_CONTENT_ID);
+    const validatedData = ContentfulResponseSchema.parse(entry);
+    console.log(validatedData.fields.homePageImages[0])
+    return validatedData.fields;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error fetching home page content:", error.message);
+    }
+    throw error; // Re-throw to be handled by error boundary
+  }
 }
 
 export async function getGalleryContent() {

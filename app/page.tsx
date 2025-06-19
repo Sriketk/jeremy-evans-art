@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import useMobile from "@/hooks/use-mobile"
 import { HomeContext } from "@/app/lib/context/homeContextProvider"
 import MasonryGrid from "@/components/ui/masonry-grid"
-import type { HomePageContent, Artwork } from "@/app/lib/types"
+import type { HomePageContent, Artwork, ArtworkType } from "@/app/lib/types"
 
 export default function Home() {
   const { homePageContent } = useContext(HomeContext)
@@ -19,7 +19,7 @@ export default function Home() {
 
   const featuredArtwork: Artwork[] = []
   const images = homePageContent["homePageImages"]
-  images.forEach((image: any) => {
+  images.forEach((image: ArtworkType) => {
     featuredArtwork.push({
       title: image.fields.title,
       description: image.fields.artDescription,
@@ -29,8 +29,8 @@ export default function Home() {
       slug: image.fields.title
         .replace(/\s+/g, "_") // Replace one or more whitespace characters with underscore
         .toLowerCase(),
-      about: image.fields.aboutThisWork,
-      relatedWork: image.fields.relatedWork
+      about: image.fields.aboutThisWork || "",
+      // relatedWork: image.fields.relatedWork
     })
   })
 
@@ -78,7 +78,7 @@ export default function Home() {
       <section className="container px-4 mx-auto max-w-7xl">
         <div className="flex flex-col items-center text-center">
           <div
-            className={`relative w-[40rem] h-[40rem] mt-5  -my-24 transition-all duration-1000 ease-out ${
+            className={`relative w-[40rem] h-[40rem]   -my-24 transition-all duration-1000 ease-out ${
               isVisible ? "opacity-100 scale-100" : "opacity-0 scale-75"
             }`}
           >
