@@ -1,7 +1,5 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+
+import ContactForm  from "./contact-form";
 
 export default function ContactPage() {
   return (
@@ -14,61 +12,7 @@ export default function ContactPage() {
 
         <div className="grid grid-cols-1 gap-16 mt-12 lg:grid-cols-2">
           <div>
-            <form className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="name" className="text-gray-700">
-                  Name
-                </Label>
-                <Input
-                  id="name"
-                  placeholder="Your name"
-                  className="border-gray-300 focus-visible:ring-gray-400"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-gray-700">
-                  Email
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Your email address"
-                  className="border-gray-300 focus-visible:ring-gray-400"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="subject" className="text-gray-700">
-                  Subject
-                </Label>
-                <Input
-                  id="subject"
-                  placeholder="What is this regarding?"
-                  className="border-gray-300 focus-visible:ring-gray-400"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="message" className="text-gray-700">
-                  Message
-                </Label>
-                <Textarea
-                  id="message"
-                  placeholder="Your message"
-                  rows={5}
-                  className="border-gray-300 focus-visible:ring-gray-400"
-                />
-              </div>
-
-              <Button
-                type="submit"
-                variant="outline"
-                className="border-gray-300 hover:bg-gray-50"
-              >
-                Send Message
-              </Button>
-            </form>
+            <ContactForm />
           </div>
 
           <div>
@@ -81,7 +25,7 @@ export default function ContactPage() {
                 <h3 className="text-base font-medium text-gray-900">Email</h3>
                 <p className="mt-1 text-gray-600">
                   <a
-                    href="mailto:artist@example.com"
+                    href="mailto:jeremyevansart@gmail.com"
                     className="hover:underline"
                   >
                     jeremyevansart@gmail.com
@@ -120,6 +64,8 @@ export default function ContactPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:underline"
+
+                  
                   >
                     Jeremy Evans
                   </a>
