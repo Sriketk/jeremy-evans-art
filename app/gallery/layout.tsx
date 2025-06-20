@@ -25,7 +25,6 @@ export default async function galleryLayout({
   const controllersData = await getControllersContent();
   const miscData = await getMiscContent();
 
-  console.log(portraitsData)
 
   function transformData(data: ArtworkCategoryType["items"]) {
     return data.map((item) => item.fields.art.fields);

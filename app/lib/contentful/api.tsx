@@ -12,7 +12,6 @@ import {
   MISC_CONTENT_ID,
 } from "./constants";
 import { HomePageSchema, ArtworkCategorySchema, AboutPageSchema } from "../types";
-import { z } from "zod";
 
 // TRICKING NEXT JS INTO NOT CACHING 
 export async function getHomePageContent() {
@@ -21,7 +20,6 @@ export async function getHomePageContent() {
     const client = await createContentfulClient();
     const entry = await client.getEntry(HOME_PAGE_CONTENT_ID);
     const validatedData = HomePageSchema.parse(entry);
-    console.log(validatedData.fields.homePageImages[0])
     return validatedData;
   } catch (error) {
     if (error instanceof Error) {
@@ -36,7 +34,6 @@ export async function getGalleryContent() {
   await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntries({ content_type: GALLERY_CONTENT_ID });
-  console.log(entry)
   return entry.items;
 }
 

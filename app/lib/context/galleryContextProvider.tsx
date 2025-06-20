@@ -25,7 +25,6 @@ export const GalleryContentContextProvider = ({
   misc: ArtworkType["fields"][];
   children: ReactNode;
 }) => {
-  console.log(portraits)
   return (
     <GalleryContent.Provider
       value={{ portraits, shoes, woodWork, vehicles, balls, controllers, misc }}
