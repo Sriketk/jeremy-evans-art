@@ -5,6 +5,16 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { HomeContext } from "../lib/context/homeContextProvider"
+import { TimeLineEventType } from "../lib/types"
+
+// Local type for this component's data model
+interface FlatTimelineEvent {
+  year: number;
+  title: string;
+  description: string;
+  image?: string;
+  details: string[];
+}
 
 export default function AboutPage() {
   const timelineRef = useRef(null)
@@ -15,17 +25,15 @@ export default function AboutPage() {
   const [introVisible, setIntroVisible] = useState(false)
   const [statementVisible, setStatementVisible] = useState(false)
 
-  const timelineEvents: any = []
-
-  aboutPageContent.timelineEvents.forEach((timeLineEvent: any) => {
-    timelineEvents.push({
+  const timelineEvents: FlatTimelineEvent[] = aboutPageContent.timelineEvents.map(
+    (timeLineEvent: TimeLineEventType) => ({
       year: timeLineEvent.fields.year,
       title: timeLineEvent.fields.title,
       description: timeLineEvent.fields.description,
-      image: timeLineEvent.fields?.image?.fields.file.url,
+      image: timeLineEvent.fields.image?.fields.file.url,
       details: timeLineEvent.fields.details,
     })
-  })
+  )
 
   useEffect(() => {
     // Progress indicator animation
@@ -175,7 +183,7 @@ export default function AboutPage() {
             <div className="absolute md:left-1/2 left-[20px] h-full w-px bg-gray-200 transform md:-translate-x-1/2 z-0"></div>
             <div className="absolute md:left-1/2 left-[20px] h-0 w-1 bg-gray-800 transform md:-translate-x-1/2 transition-all duration-300 ease-out timeline-progress z-0"></div>
 
-            {timelineEvents.map((event: any, index: any) => (
+            {timelineEvents.map((event, index) => (
               <div
                 key={index}
                 className={`timeline-event relative mb-16 z-10 transition-all duration-1000 ease-out ${
@@ -249,7 +257,11 @@ export default function AboutPage() {
                       >
                         <div className={`max-h-[600px] ${index % 2 === 0 ? "md:text-right" : "md:text-left"}`}>
                           <Image
-                            src={event.image || "/placeholder.svg"}
+                            src={
+                              event.image.startsWith("//")
+                                ? `https:${event.image}`
+                                : event.image
+                            }
                             alt={event.title}
                             width={500}
                             height={400}
@@ -270,7 +282,7 @@ export default function AboutPage() {
                           transitionDelay: `${index * 100 + 600}ms`,
                         }}
                       >
-                        {event.details.map((detail: any, i: any) => (
+                        {event.details.map((detail, i) => (
                           <li key={i} className="text-sm text-gray-500">
                             {detail}
                           </li>

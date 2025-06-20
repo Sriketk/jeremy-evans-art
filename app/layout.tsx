@@ -11,7 +11,6 @@ import {
   getAboutPageContent,
   getHomePageContent,
 } from "@/app/lib/contentful/api";
-import { ContentfulResponseSchema } from "@/app/lib/types";
 
 // Primary font for body text
 const montserrat = Montserrat({
@@ -40,10 +39,6 @@ export default async function RootLayout({
 }) {
   const homePageContent = await getHomePageContent();
   const aboutPageContent = await getAboutPageContent();
-
-  // // Validate the response using Zod schema
-  // const validatedHomeContent = ContentfulResponseSchema.parse(homePageContent);
-  // const validatedAboutContent = ContentfulResponseSchema.parse(aboutPageContent);
 
   return (
     <html lang="en">
@@ -76,8 +71,8 @@ export default async function RootLayout({
           </header>
           <main className="flex-1">
             <HomeContextProvider
-              homePageContent={homePageContent}
-              aboutPageContent={aboutPageContent}
+              homePageContent={homePageContent.fields}
+              aboutPageContent={aboutPageContent.fields}
             >
               {children}
             </HomeContextProvider>

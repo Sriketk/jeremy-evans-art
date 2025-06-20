@@ -1,5 +1,6 @@
 "use client";
 import { createContext, ReactNode } from "react";
+import { HomePageType, AboutPageType } from "../types";
 
 export const HomeContext = createContext<any>(null);
 
@@ -8,8 +9,8 @@ export const HomeContextProvider = ({
   aboutPageContent,
   children,
 }: {
-  homePageContent: any;
-  aboutPageContent: any;
+  homePageContent: HomePageType["fields"];
+  aboutPageContent: AboutPageType["fields"];
   children: ReactNode;
 }) => {
   return (

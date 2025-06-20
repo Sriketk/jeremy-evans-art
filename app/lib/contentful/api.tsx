@@ -11,7 +11,7 @@ import {
   CONTROLLERS_CONTENT_ID,
   MISC_CONTENT_ID,
 } from "./constants";
-import { ContentfulResponseSchema } from "../types";
+import { HomePageSchema, ArtworkCategorySchema, AboutPageSchema } from "../types";
 import { z } from "zod";
 
 // TRICKING NEXT JS INTO NOT CACHING 
@@ -20,9 +20,9 @@ export async function getHomePageContent() {
     await fetch("https://example.com/trigger", { cache: "no-store" });
     const client = await createContentfulClient();
     const entry = await client.getEntry(HOME_PAGE_CONTENT_ID);
-    const validatedData = ContentfulResponseSchema.parse(entry);
+    const validatedData = HomePageSchema.parse(entry);
     console.log(validatedData.fields.homePageImages[0])
-    return validatedData.fields;
+    return validatedData;
   } catch (error) {
     if (error instanceof Error) {
       console.error("Error fetching home page content:", error.message);
@@ -31,10 +31,12 @@ export async function getHomePageContent() {
   }
 }
 
+//NOT GETTING USED; DONT NEED ALL THE ART AT ONCE JUST FETCHING SEPERATELY
 export async function getGalleryContent() {
   await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntries({ content_type: GALLERY_CONTENT_ID });
+  console.log(entry)
   return entry.items;
 }
 
@@ -42,35 +44,40 @@ export async function getPortraitsContent() {
   await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntries({ content_type: PORTRAITS_CONTENT_ID });
-  return entry.items;
+  const validatedData = ArtworkCategorySchema.parse(entry);
+  return validatedData.items;
 }
 
 export async function getShoesContent() {
   await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntries({ content_type: SHOES_CONTENT_ID });
-  return entry.items;
+  const validatedData = ArtworkCategorySchema.parse(entry);
+  return validatedData.items;
 }
 
 export async function getBallsContent() {
   await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntries({ content_type: BALLS_CONTENT_ID });
-  return entry.items;
+  const validatedData = ArtworkCategorySchema.parse(entry);
+  return validatedData.items;
 }
 
 export async function getVehiclesConent() {
   await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntries({ content_type: VEHICLES_CONTENT_ID });
-  return entry.items;
+  const validatedData = ArtworkCategorySchema.parse(entry);
+  return validatedData.items;
 }
 
 export async function getWoodWorkContent() {
   await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntries({ content_type: WOODWORK_CONTENT_ID });
-  return entry.items;
+  const validatedData = ArtworkCategorySchema.parse(entry);
+  return validatedData.items;
 }
 
 export async function getControllersContent() {
@@ -79,19 +86,22 @@ export async function getControllersContent() {
   const entry = await client.getEntries({
     content_type: CONTROLLERS_CONTENT_ID,
   });
-  return entry.items;
+  const validatedData = ArtworkCategorySchema.parse(entry);
+  return validatedData.items;
 }
 
 export async function getMiscContent() {
   await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntries({ content_type: MISC_CONTENT_ID });
-  return entry.items;
+  const validatedData = ArtworkCategorySchema.parse(entry);
+  return validatedData.items;
 }
 
 export async function getAboutPageContent() {
   await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntry(ABOUT_PAGE_ID);
-  return entry.fields;
+  const validatedData = AboutPageSchema.parse(entry);
+  return validatedData;
 }

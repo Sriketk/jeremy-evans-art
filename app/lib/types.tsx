@@ -37,7 +37,7 @@ export const imageSchema = z.object({
   fields: z.object({
     file: z.object({
       contentType: z.string(),
-      details: z.object({}),
+      details: z.record(z.string(), z.any()),
       fileName: z.string(),
       url: z.string(),
     }),
@@ -45,8 +45,6 @@ export const imageSchema = z.object({
     description: z.string(),
   }),
 });
-
-
 
 // Zod schemas for validation
 export const ArtworkSchema = z.object({
@@ -59,12 +57,11 @@ export const ArtworkSchema = z.object({
     aboutThisWork: z.string().optional(),
     image: imageSchema,
   }),
-})
+});
 
 export type ArtworkType = z.infer<typeof ArtworkSchema>;
 
-
-export const ContentfulResponseSchema = z.object({
+export const HomePageSchema = z.object({
   metadata: z.object({}),
   sys: z.object({}),
   fields: z.object({
@@ -76,4 +73,50 @@ export const ContentfulResponseSchema = z.object({
 });
 
 // Type inference from schema
-export type ContentfulResponse = z.infer<typeof ContentfulResponseSchema>;
+export type HomePageType = z.infer<typeof HomePageSchema>;
+
+export const ArtworkCategorySchema = z.object({
+  includes: z.object({}),
+  items: z.array(
+    z.object({
+      fields: z.object({
+        title: z.string(),
+        art: ArtworkSchema,
+      }),
+    })
+  ),
+  limit: z.number(),
+  skip: z.number(),
+  sys: z.object({}),
+  total: z.number(),
+});
+
+export type ArtworkCategoryType = z.infer<typeof ArtworkCategorySchema>;
+
+export const TimeLineEventSchema = z.object({
+  metadata: z.object({}),
+  sys: z.object({}),
+  fields: z.object({
+    year: z.number(),
+    title: z.string(),
+    description: z.string(),
+    image: imageSchema,
+    details: z.array(z.string()),
+  }),
+});
+
+export type TimeLineEventType = z.infer<typeof TimeLineEventSchema>;
+
+export const AboutPageSchema = z.object({
+  metadata: z.object({}),
+  sys: z.object({}),
+  fields: z.object({
+    jeremyEvansPicture: imageSchema,
+    about: z.string(),
+    timelineEvents: z.array(TimeLineEventSchema),
+    name: z.string(),
+    artistStatement: z.string(),
+  }),
+});
+
+export type AboutPageType = z.infer<typeof AboutPageSchema>;

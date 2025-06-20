@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import { useContext } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Artwork } from "@/app/lib/types";
+import { ArtworkType } from "@/app/lib/types";
 import { Slug } from "@/app/lib/context/slugContextProvider";
 import { GalleryContent } from "@/app/lib/context/galleryContextProvider";
 
@@ -14,32 +14,36 @@ export default function ArtworkDetailPage() {
   const slugContext = useContext(Slug);
   const slug = slugContext.slug;
   const galleryContent = useContext(GalleryContent);
-  const allArt = galleryContent.allArtWork;
-  const portraits = galleryContent.portraits;
-  const shoes = galleryContent.shoes;
-  const woodWork = galleryContent.woodWork;
-  const vehicles = galleryContent.vehicles;
-  const balls = galleryContent.balls;
-  const controllers = galleryContent.controllers;
-  const misc = galleryContent.misc;
 
-  let artwork: any;
-  if (portraits[slug]) {
-    artwork = portraits[slug];
-  } else if (shoes[slug]) {
-    artwork = shoes[slug];
-  } else if (woodWork[slug]) {
-    artwork = woodWork[slug];
-  } else if (vehicles[slug]) {
-    artwork = vehicles[slug];
-  } else if (balls[slug]) {
-    artwork = balls[slug];
-  } else if (controllers[slug]) {
-    artwork = controllers[slug];
-  } else if (misc[slug]) {
-    artwork = misc[slug];
+  if (!galleryContent || !slug) {
+    return <div>Loading...</div>; // Or some other loading state
   }
 
+  const { portraits, shoes, woodWork, vehicles, balls, controllers, misc } =
+    galleryContent;
+
+  const allArtCategories = [
+    ...portraits,
+    ...shoes,
+    ...woodWork,
+    ...vehicles,
+    ...balls,
+    ...controllers,
+    ...misc,
+  ];
+
+  const artworkMap = new Map<string, ArtworkType["fields"]>(
+    allArtCategories.map((art) => [
+      art.title.replace(/\s+/g, "_").toLowerCase(),
+      art,
+    ])
+  );
+
+  const artwork = artworkMap.get(slug);
+
+  if (!artwork) {
+    return <div>Artwork not found</div>; // Handle case where slug is invalid
+  }
 
   // In a real application, you would fetch the artwork data based on the slug
   // For this example, we'll find it in our mock data
@@ -63,7 +67,11 @@ export default function ArtworkDetailPage() {
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
           <div className="relative">
             <Image
-              src={artwork.url || "/placeholder.svg"}
+              src={
+                artwork.image.fields.file.url.startsWith("//")
+                  ? `https:${artwork.image.fields.file.url}`
+                  : artwork.image.fields.file.url
+              }
               alt={artwork.title}
               width={800}
               height={800}
@@ -77,16 +85,11 @@ export default function ArtworkDetailPage() {
               {artwork.title}
             </h1>
             <p className="mt-2 text-gray-500">{artwork.year}</p>
-            <p className="mt-1 text-gray-500">{artwork.category}</p>
 
             <Separator className="my-6" />
 
             <div className="prose max-w-none">
-              <p className="text-gray-700">{artwork.description}</p>
-              <p className="text-gray-700">
-                {artwork.artDescription ||
-                  "Dimensions variable. Please inquire for availability and pricing."}
-              </p>
+              <p className="text-gray-700">{artwork.artDescription}</p>
 
               <h3 className="mt-8 text-xl font-light text-gray-900">
                 About this Work
@@ -121,38 +124,7 @@ export default function ArtworkDetailPage() {
             Related Works
           </h2>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
-            {allArtwork
-              .filter(
-                (art) =>
-                  art.id !== artwork.id && art.category === artwork.category
-              )
-              .slice(0, 3)
-              .map((art) => (
-                <Link
-                  key={art.id}
-                  href={`/gallery/${art.slug}`}
-                  className="group"
-                >
-                  <div className="overflow-hidden">
-                    <div className="relative aspect-square">
-                      <Image
-                        src={art.image || "/placeholder.svg"}
-                        alt={art.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    </div>
-                    <div className="mt-3">
-                      <h3 className="text-base font-medium text-gray-900">
-                        {art.title}
-                      </h3>
-                      <p className="mt-1 text-sm text-gray-500">
-                        {art.year} · {art.category}
-                      </p>
-                    </div>
-                  </div>
-                </Link>
-              ))}
+            {/* This part needs to be refactored as `allArtwork` is not available in the same way */}
           </div>
         </div>
       </div>

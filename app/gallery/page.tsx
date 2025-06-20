@@ -5,21 +5,20 @@ import { GalleryContent } from "@/app/lib/context/galleryContextProvider";
 import GalleryNavigation from "@/components/ui/gallery-navigation";
 import MasonryGrid from "@/components/ui/masonry-grid";
 import useMobile from "@/hooks/use-mobile";
-import type { Artwork } from "@/app/lib/types";
+import type { Artwork, ArtworkType } from "@/app/lib/types";
 
 const LAST_CATEGORY_KEY = "lastGalleryCategory";
 
 export default function GalleryPage() {
-  const {
-    allArtWork,
-    portraits,
-    shoes,
-    woodWork,
-    balls,
-    vehicles,
-    controllers,
-    misc,
-  } = useContext(GalleryContent);
+  const context = useContext(GalleryContent);
+
+  if (!context) {
+    // Handle the case where context is null, maybe return a loading spinner
+    return <div>Loading...</div>;
+  }
+
+  const { portraits, shoes, woodWork, balls, vehicles, controllers, misc } =
+    context;
 
   // Initialize with localStorage value if available, otherwise default to "portraits"
   const [activeCategory, setActiveCategory] = useState(() => {
@@ -39,32 +38,32 @@ export default function GalleryPage() {
     localStorage.setItem(LAST_CATEGORY_KEY, activeCategory);
   }, [activeCategory]);
 
-  // Transform your data structure to match the Artwork interface
-  const transformToArtwork = (
-    data: Record<string, any>,
+  const mapToArtwork = (
+    data: ArtworkType["fields"][],
     category: string
   ): Artwork[] => {
-    return Object.entries(data).map(([slug, item]) => ({
+    return data.map((item) => ({
       title: item.title,
       description: item.artDescription,
-      image: item.url.startsWith("//") ? `https:${item.url}` : item.url,
+      image: item.image.fields.file.url.startsWith("//")
+        ? `https:${item.image.fields.file.url}`
+        : item.image.fields.file.url,
       year: item.year,
       category: category,
-      slug: slug,
-      about: item.aboutThisWork,
-      relatedWork: item.relatedWork
+      slug: item.title.replace(/\s+/g, "_").toLowerCase(),
+      about: item.aboutThisWork || "",
     }));
   };
 
   // Prepare all artworks by category
   const allArtworks = {
-    portraits: transformToArtwork(portraits, "Portraits"),
-    shoes: transformToArtwork(shoes, "Shoes"),
-    woodwork: transformToArtwork(woodWork, "Wood Work"),
-    balls: transformToArtwork(balls, "Balls"),
-    vehicles: transformToArtwork(vehicles, "Vehicles"),
-    controllers: transformToArtwork(controllers, "Controllers"),
-    misc: transformToArtwork(misc, "Miscellaneous"),
+    portraits: mapToArtwork(portraits, "Portraits"),
+    shoes: mapToArtwork(shoes, "Shoes"),
+    woodwork: mapToArtwork(woodWork, "Wood Work"),
+    balls: mapToArtwork(balls, "Balls"),
+    vehicles: mapToArtwork(vehicles, "Vehicles"),
+    controllers: mapToArtwork(controllers, "Controllers"),
+    misc: mapToArtwork(misc, "Miscellaneous"),
   };
 
   // Category configuration
