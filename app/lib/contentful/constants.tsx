@@ -7,5 +7,4 @@ export const WOODWORK_CONTENT_ID = "woodWork"
 export const VEHICLES_CONTENT_ID =  "vehicles"
 export const CONTROLLERS_CONTENT_ID = "controllers"
 export const MISC_CONTENT_ID = "misc"
-
 export const ABOUT_PAGE_ID = "4kMTLNKMGeTIn0KU225aPJ"
