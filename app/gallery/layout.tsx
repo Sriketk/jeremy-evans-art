@@ -3,7 +3,7 @@ import {
   getShoesContent,
   getGalleryContent,
   getWoodWorkContent,
-  getVehiclesConent,
+  getVehiclesContent,
   getBallsContent,
   getControllersContent,
   getMiscContent,
@@ -21,7 +21,7 @@ export default async function galleryLayout({
   const shoesData = await getShoesContent();
   const woodWorkData = await getWoodWorkContent();
   const ballsData = await getBallsContent();
-  const vehiclesData = await getVehiclesConent();
+  const vehiclesData = await getVehiclesContent();
   const controllersData = await getControllersContent();
   const miscData = await getMiscContent();
 

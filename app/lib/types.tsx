@@ -56,6 +56,7 @@ export const ArtworkSchema = z.object({
     artDescription: z.string(),
     aboutThisWork: z.string().optional(),
     image: imageSchema,
+    angles: z.any(),
   }),
 });
 

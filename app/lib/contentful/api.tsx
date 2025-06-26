@@ -61,7 +61,7 @@ export async function getBallsContent() {
   return validatedData.items;
 }
 
-export async function getVehiclesConent() {
+export async function getVehiclesContent() {
   await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntries({ content_type: VEHICLES_CONTENT_ID });
