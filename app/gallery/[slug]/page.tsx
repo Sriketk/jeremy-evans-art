@@ -40,7 +40,7 @@ export default function ArtworkDetailPage() {
   );
 
   const artwork = artworkMap.get(slug);
-
+  console.log(artwork); 
   if (!artwork) {
     return <div>Artwork not found</div>; // Handle case where slug is invalid
   }
@@ -124,7 +124,11 @@ export default function ArtworkDetailPage() {
             Related Works
           </h2>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
-            {/* This part needs to be refactored as `allArtwork` is not available in the same way */}
+            {artwork.angles?.map((angle: any, index: number) => (
+              <div key={index}>
+                <p>{JSON.stringify(angle.fields) || ''}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

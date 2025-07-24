@@ -56,7 +56,15 @@ export const ArtworkSchema = z.object({
     artDescription: z.string(),
     aboutThisWork: z.string().optional(),
     image: imageSchema,
-    angles: z.any(),
+    angles: z.array(z.object({
+      fields: z.object({
+        title: z.string(),
+        year: z.number(),
+        artDescription: z.string(),
+        aboutThisWork: z.string().optional(),
+        image: imageSchema,
+      }).optional(),
+    }).optional()).optional(),
   }),
 });
 

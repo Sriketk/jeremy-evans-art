@@ -40,7 +40,7 @@ export async function getGalleryContent() {
 export async function getPortraitsContent() {
   await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
-  const entry = await client.getEntries({ content_type: PORTRAITS_CONTENT_ID });
+  const entry = await client.getEntries({ content_type: PORTRAITS_CONTENT_ID, include: 3 });
   const validatedData = ArtworkCategorySchema.parse(entry);
   return validatedData.items;
 }
