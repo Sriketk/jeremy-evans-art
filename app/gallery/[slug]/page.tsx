@@ -6,14 +6,17 @@ import { ArrowLeft } from "lucide-react";
 import { useContext } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { ArtworkType } from "@/app/lib/types";
+import { Artwork, ArtworkType } from "@/app/lib/types";
 import { Slug } from "@/app/lib/context/slugContextProvider";
 import { GalleryContent } from "@/app/lib/context/galleryContextProvider";
+import MasonryGrid from "@/components/ui/masonry-grid";
+import useMobile from "@/hooks/use-mobile";
 
 export default function ArtworkDetailPage() {
   const slugContext = useContext(Slug);
   const slug = slugContext.slug;
   const galleryContent = useContext(GalleryContent);
+  const isMobile = useMobile();
 
   if (!galleryContent || !slug) {
     return <div>Loading...</div>; // Or some other loading state
@@ -44,6 +47,30 @@ export default function ArtworkDetailPage() {
   if (!artwork) {
     return <div>Artwork not found</div>; // Handle case where slug is invalid
   }
+
+  const mapToArtwork = (data: ArtworkType['fields']['angles'], category: string): Artwork[] => {
+    if (!data || data.length === 0) {
+      return [];
+    }
+    return data.map((item) => ({
+      title: item?.fields?.title ?? "",
+      description: item?.fields?.artDescription ?? "",
+      image: item?.fields?.image.fields.file.url
+        ? (item.fields.image.fields.file.url.startsWith("//")
+            ? `https:${item.fields.image.fields.file.url}`
+            : item.fields.image.fields.file.url)
+        : "",
+      year: item?.fields?.year ?? 2025,
+      category: category ?? "",
+      slug: item?.fields?.title?.replace(/\s+/g, "_").toLowerCase() ?? "",
+      about: item?.fields?.aboutThisWork ?? "",
+    }));
+  };  
+
+
+    const angles = mapToArtwork(artwork.angles, "Angles");
+    console.log(angles);
+  
 
   // In a real application, you would fetch the artwork data based on the slug
   // For this example, we'll find it in our mock data
@@ -121,15 +148,18 @@ export default function ArtworkDetailPage() {
 
         <div className="mt-24">
           <h2 className="mb-8 text-2xl font-light text-gray-900">
-            Related Works
+            Angles
           </h2>
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
-            {artwork.angles?.map((angle: any, index: number) => (
-              <div key={index}>
-                <p>{JSON.stringify(angle.fields) || ''}</p>
-              </div>
-            ))}
+          {angles.length > 0 && (
+          <div className="relative">
+              <MasonryGrid
+                key={angles.length}
+                items={angles}
+                columns={isMobile ? 1 : 3}
+                gap={16}
+              />
           </div>
+          )}
         </div>
       </div>
     </div>
