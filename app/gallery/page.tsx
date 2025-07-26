@@ -11,6 +11,7 @@ const LAST_CATEGORY_KEY = "lastGalleryCategory";
 
 export default function GalleryPage() {
   const context = useContext(GalleryContent);
+  const [mounted, setMounted] = useState(false);
 
   if (!context) {
     return <div>Loading...</div>;
@@ -18,18 +19,24 @@ export default function GalleryPage() {
 
   const { portraits, shoes, woodWork, balls, vehicles, controllers, misc } = context;
 
-  const [activeCategory, setActiveCategory] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem(LAST_CATEGORY_KEY) || "portraits";
-    }
-    return "portraits";
-  });
+  const [activeCategory, setActiveCategory] = useState("portraits");
 
   const isMobile = useMobile();
 
   useEffect(() => {
-    localStorage.setItem(LAST_CATEGORY_KEY, activeCategory);
-  }, [activeCategory]);
+    setMounted(true);
+    // Load from localStorage only after mounting
+    const savedCategory = localStorage.getItem(LAST_CATEGORY_KEY);
+    if (savedCategory) {
+      setActiveCategory(savedCategory);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      localStorage.setItem(LAST_CATEGORY_KEY, activeCategory);
+    }
+  }, [activeCategory, mounted]);
 
   const mapToArtwork = (data: ArtworkType["fields"][], category: string): Artwork[] => {
     return data.map((item) => ({
