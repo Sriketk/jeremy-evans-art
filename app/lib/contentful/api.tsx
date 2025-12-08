@@ -13,10 +13,8 @@ import {
 } from "./constants";
 import { HomePageSchema, ArtworkCategorySchema, AboutPageSchema } from "../types";
 
-// TRICKING NEXT JS INTO NOT CACHING 
 export async function getHomePageContent() {
   try {
-    await fetch("https://example.com/trigger", { cache: "no-store" });
     const client = await createContentfulClient();
     const entry = await client.getEntry(HOME_PAGE_CONTENT_ID);
     const validatedData = HomePageSchema.parse(entry);
@@ -31,14 +29,12 @@ export async function getHomePageContent() {
 
 //NOT GETTING USED; DONT NEED ALL THE ART AT ONCE JUST FETCHING SEPERATELY
 export async function getGalleryContent() {
-  await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntries({ content_type: GALLERY_CONTENT_ID });
   return entry.items;
 }
 
 export async function getPortraitsContent() {
-  await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntries({ content_type: PORTRAITS_CONTENT_ID, include: 3 });
   const validatedData = ArtworkCategorySchema.parse(entry);
@@ -46,7 +42,6 @@ export async function getPortraitsContent() {
 }
 
 export async function getShoesContent() {
-  await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntries({ content_type: SHOES_CONTENT_ID, include: 3 });
   const validatedData = ArtworkCategorySchema.parse(entry);
@@ -54,7 +49,6 @@ export async function getShoesContent() {
 }
 
 export async function getBallsContent() {
-  await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntries({ content_type: BALLS_CONTENT_ID, include: 3 });
   const validatedData = ArtworkCategorySchema.parse(entry);
@@ -62,7 +56,6 @@ export async function getBallsContent() {
 }
 
 export async function getVehiclesContent() {
-  await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntries({ content_type: VEHICLES_CONTENT_ID, include: 3 });
   const validatedData = ArtworkCategorySchema.parse(entry);
@@ -70,7 +63,6 @@ export async function getVehiclesContent() {
 }
 
 export async function getWoodWorkContent() {
-  await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntries({ content_type: WOODWORK_CONTENT_ID, include: 3 });
   const validatedData = ArtworkCategorySchema.parse(entry);
@@ -78,7 +70,6 @@ export async function getWoodWorkContent() {
 }
 
 export async function getControllersContent() {
-  await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntries({
     content_type: CONTROLLERS_CONTENT_ID,
@@ -89,7 +80,6 @@ export async function getControllersContent() {
 }
 
 export async function getMiscContent() {
-  await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntries({ content_type: MISC_CONTENT_ID, include: 3 });
   const validatedData = ArtworkCategorySchema.parse(entry);
@@ -97,7 +87,6 @@ export async function getMiscContent() {
 }
 
 export async function getAboutPageContent() {
-  await fetch("https://example.com/trigger", { cache: "no-store" });
   const client = await createContentfulClient();
   const entry = await client.getEntry(ABOUT_PAGE_ID);
   const validatedData = AboutPageSchema.parse(entry);

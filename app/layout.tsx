@@ -12,6 +12,9 @@ import {
   getHomePageContent,
 } from "@/app/lib/contentful/api";
 
+
+export const dynamic = 'force-dynamic'
+
 // Primary font for body text
 const montserrat = Montserrat({
   subsets: ["latin"],
