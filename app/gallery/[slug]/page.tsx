@@ -10,7 +10,7 @@ import { Artwork, ArtworkType } from "@/app/lib/types";
 import { Slug } from "@/app/lib/context/slugContextProvider";
 import { GalleryContent } from "@/app/lib/context/galleryContextProvider";
 import MasonryGrid from "@/components/ui/masonry-grid";
-import ArtworkNotFound from "@/components/ui/artwork-not-found";
+import ItemNotFound from "@/components/ui/not-found";
 import useMobile from "@/hooks/use-mobile";
 
 export default function ArtworkDetailPage() {
@@ -160,7 +160,7 @@ export default function ArtworkDetailPage() {
             )}
           </>
         ) : (
-          <ArtworkNotFound />
+          <ItemNotFound />
         )}
       </div>
     </div>
