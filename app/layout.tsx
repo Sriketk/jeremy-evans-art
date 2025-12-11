@@ -40,8 +40,10 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const homePageContent = await getHomePageContent();
-  const aboutPageContent = await getAboutPageContent();
+  const [homePageContent, aboutPageContent] = await Promise.all([
+    getHomePageContent(),
+    getAboutPageContent(),
+  ]);
 
   return (
     <html lang="en">

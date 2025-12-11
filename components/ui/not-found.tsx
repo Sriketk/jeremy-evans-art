@@ -8,18 +8,32 @@ import { usePathname } from "next/navigation";
 export default function ItemNotFound() {
   
   const url = usePathname();
-  const item = url.split("/").pop();
 
   const isGallery = url.includes("/gallery");
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-      <div className="max-w-md mx-auto space-y-6">
-        <h1 className="text-4xl font-light text-gray-900">{isGallery ? "Artwork" : "Page"} Not Found</h1>
-        <p className="text-lg text-gray-600">
-          The {isGallery ? "artwork" : "page"} you're looking for doesn't exist or may have been removed.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+    <div className="min-h-screen bg-white">
+      <div className={`container px-4 mx-auto max-w-6xl ${isGallery ? 'pb-16' : 'py-16'}`}>
+        {!isGallery && (
+          <Button
+            asChild
+            variant="ghost"
+            size="sm"
+            className="mb-8 hover:bg-transparent hover:text-gray-900 p-0 h-auto"
+          >
+            <Link href="/">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Home
+            </Link>
+          </Button>
+        )}
+        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+          <div className="max-w-md mx-auto space-y-6">
+            <h1 className="text-4xl font-light text-gray-900">{isGallery ? "Artwork" : "Page"} Not Found</h1>
+            <p className="text-lg text-gray-600">
+              The {isGallery ? "artwork" : "page"} you're looking for doesn't exist or may have been removed.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
           <Button
             asChild
             variant="outline"
@@ -51,6 +65,8 @@ export default function ItemNotFound() {
             </Link>
           </Button>
           )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
