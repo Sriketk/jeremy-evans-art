@@ -8,7 +8,9 @@
     "build": "next build --webpack",
     "build:turbo": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check": "npx ultracite@latest check",
+    "fix": "npx ultracite@latest fix"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
