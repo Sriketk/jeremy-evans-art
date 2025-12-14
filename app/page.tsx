@@ -13,7 +13,6 @@ import type { Artwork, ArtworkType } from "@/app/lib/types"
 export default function Home() {
   const { homePageContent } = useContext(HomeContext)
   const isMobile = useMobile()
-  console.log(homePageContent)
   const featuredArtwork: Artwork[] = homePageContent["homePageImages"]?.map((image: ArtworkType) => ({
     title: image.fields.title,
     description: image.fields.artDescription,

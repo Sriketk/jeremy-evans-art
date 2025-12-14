@@ -3,13 +3,14 @@ import {
   getShoesContent,
   getGalleryContent,
   getWoodWorkContent,
-  getVehiclesConent,
+  getVehiclesContent,
   getBallsContent,
   getControllersContent,
   getMiscContent,
 } from "@/app/lib/contentful/api";
 import { GalleryContentContextProvider } from "../lib/context/galleryContextProvider";
-import { ArtworkCategoryType, ArtworkCategorySchema } from "../lib/types";
+import { ArtworkCategoryType } from "../lib/types";
+import type React from "react";
 
 export default async function galleryLayout({
   children,
@@ -17,14 +18,16 @@ export default async function galleryLayout({
   children: React.ReactNode;
 }) {
   // const allArt = await getGalleryContent();
-  const portraitsData = await getPortraitsContent();
-  const shoesData = await getShoesContent();
-  const woodWorkData = await getWoodWorkContent();
-  const ballsData = await getBallsContent();
-  const vehiclesData = await getVehiclesConent();
-  const controllersData = await getControllersContent();
-  const miscData = await getMiscContent();
 
+  const [portraitsData, shoesData, woodWorkData, ballsData, vehiclesData, controllersData, miscData] = await Promise.all([
+    getPortraitsContent(),
+    getShoesContent(),
+    getWoodWorkContent(),
+    getBallsContent(),
+    getVehiclesContent(),
+    getControllersContent(),
+    getMiscContent(),
+  ]);
 
   function transformData(data: ArtworkCategoryType["items"]) {
     return data.map((item) => item.fields.art.fields);
@@ -36,6 +39,7 @@ export default async function galleryLayout({
   const vehicles = transformData(vehiclesData);
   const controllers = transformData(controllersData);
   const misc = transformData(miscData);
+  
   return (
     <GalleryContentContextProvider
       // allArtWork={allArt}

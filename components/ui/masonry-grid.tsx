@@ -28,6 +28,7 @@ export default function MasonryGrid({
   const [positionedItems, setPositionedItems] = useState<PositionedItem[]>([])
   const [containerHeight, setContainerHeight] = useState(0)
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set())
+  const [mounted, setMounted] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
   const calculateLayout = async (containerWidth: number) => {
@@ -80,6 +81,12 @@ export default function MasonryGrid({
   }
 
   useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+
     const handleResize = () => {
       if (containerRef.current) {
         calculateLayout(containerRef.current.offsetWidth)
@@ -89,7 +96,18 @@ export default function MasonryGrid({
     handleResize()
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
-  }, [items, columns, gap])
+  }, [items, columns, gap, mounted])
+
+  // Show loading state during SSR and initial render
+  if (!mounted) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {items.slice(0, 6).map((item, index) => (
+          <div key={index} className="aspect-square bg-gray-100 animate-pulse rounded-lg" />
+        ))}
+      </div>
+    )
+  }
 
   return (
     <div ref={containerRef} className="relative w-full" style={{ height: containerHeight }}>

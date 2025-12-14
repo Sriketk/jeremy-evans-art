@@ -22,9 +22,10 @@ export default function GalleryNavigation({ categories, activeCategory, onCatego
 
   const activeLabel = categories.find((cat) => cat.key === activeCategory)?.label || "Shoes"
 
-  if (isMobile) {
-    return (
-      <div className="w-full mb-8">
+  return (
+    <>
+      {/* Mobile Navigation - Always rendered but conditionally visible */}
+      <div className={`w-full mb-8 ${isMobile ? 'block' : 'hidden'}`}>
         <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="w-full justify-between h-12 text-left font-medium">
@@ -53,26 +54,25 @@ export default function GalleryNavigation({ categories, activeCategory, onCatego
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    )
-  }
 
-  return (
-    <div className="flex flex-wrap gap-2 mb-8 justify-center">
-      {categories.map((category) => (
-        <Button
-          key={category.key}
-          variant={activeCategory === category.key ? "default" : "outline"}
-          onClick={() => onCategoryChange(category.key)}
-          className={`transition-all duration-300 hover:scale-105 ${
-            activeCategory === category.key
-              ? "bg-gray-900 text-white shadow-lg"
-              : "border-gray-300 hover:bg-gray-50 hover:border-gray-400"
-          }`}
-        >
-          {category.label}
-          {category.count && <span className="ml-2 text-sm opacity-75">({category.count})</span>}
-        </Button>
-      ))}
-    </div>
+      {/* Desktop Navigation - Always rendered but conditionally visible */}
+      <div className={`flex flex-wrap gap-2 mb-8 justify-center ${isMobile ? 'hidden' : 'flex'}`}>
+        {categories.map((category) => (
+          <Button
+            key={category.key}
+            variant={activeCategory === category.key ? "default" : "outline"}
+            onClick={() => onCategoryChange(category.key)}
+            className={`transition-all duration-300 hover:scale-105 ${
+              activeCategory === category.key
+                ? "bg-gray-900 text-white shadow-lg"
+                : "border-gray-300 hover:bg-gray-50 hover:border-gray-400"
+            }`}
+          >
+            {category.label}
+            {category.count && <span className="ml-2 text-sm opacity-75">({category.count})</span>}
+          </Button>
+        ))}
+      </div>
+    </>
   )
 }

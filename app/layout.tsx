@@ -12,6 +12,9 @@ import {
   getHomePageContent,
 } from "@/app/lib/contentful/api";
 
+
+export const dynamic = 'force-dynamic'
+
 // Primary font for body text
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -37,8 +40,10 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const homePageContent = await getHomePageContent();
-  const aboutPageContent = await getAboutPageContent();
+  const [homePageContent, aboutPageContent] = await Promise.all([
+    getHomePageContent(),
+    getAboutPageContent(),
+  ]);
 
   return (
     <html lang="en">
