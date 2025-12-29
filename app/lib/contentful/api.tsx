@@ -27,12 +27,6 @@ export async function getHomePageContent() {
   }
 }
 
-//NOT GETTING USED; DONT NEED ALL THE ART AT ONCE JUST FETCHING SEPERATELY
-export async function getGalleryContent() {
-  const client = await createContentfulClient();
-  const entry = await client.getEntries({ content_type: GALLERY_CONTENT_ID });
-  return entry.items;
-}
 
 export async function getPortraitsContent() {
   const client = await createContentfulClient();

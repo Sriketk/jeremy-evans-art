@@ -28,53 +28,36 @@ export default function MasonryGrid({
   const [containerHeight, setContainerHeight] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const calculateLayout = async (containerWidth: number) => {
+  const calculateLayout = (containerWidth: number) => {
     if (!containerWidth || items.length === 0) return
 
     const columnWidth = (containerWidth - gap * (columns - 1)) / columns
     const columnHeights = new Array(columns).fill(0)
     const positioned: PositionedItem[] = []
 
-    const imagePromises = items.map((item, index) => {
-      return new Promise<{ width: number; height: number; index: number }>((resolve) => {
-        const img = new window.Image()
-        img.crossOrigin = "anonymous"
-        img.onload = () => {
-          const aspectRatio = img.height / img.width
-          const scaledHeight = columnWidth * aspectRatio
-          resolve({ width: columnWidth, height: scaledHeight, index })
-        }
-        img.onerror = () => resolve({ width: columnWidth, height: columnWidth * 1.2, index })
-        img.src = item.image.startsWith("//") ? `https:${item.image}` : item.image
+    items.forEach((item, index) => {
+      // Calculate scaled height based on aspect ratio from Contentful dimensions
+      const aspectRatio = item.height / item.width
+      const scaledHeight = columnWidth * aspectRatio
+
+      const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights))
+      const x = shortestColumnIndex * (columnWidth + gap)
+      const y = columnHeights[shortestColumnIndex]
+
+      positioned.push({
+        ...item,
+        width: columnWidth,
+        height: scaledHeight,
+        x,
+        y,
+        index,
       })
+
+      columnHeights[shortestColumnIndex] += scaledHeight + gap
     })
 
-    try {
-      const imageDimensions = await Promise.all(imagePromises)
-      imageDimensions.sort((a, b) => a.index - b.index)
-
-      imageDimensions.forEach(({ width, height, index }) => {
-        const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights))
-        const x = shortestColumnIndex * (columnWidth + gap)
-        const y = columnHeights[shortestColumnIndex]
-
-        positioned.push({
-          ...items[index],
-          width,
-          height,
-          x,
-          y,
-          index,
-        })
-
-        columnHeights[shortestColumnIndex] += height + gap
-      })
-
-      setPositionedItems(positioned)
-      setContainerHeight(Math.max(...columnHeights) - gap)
-    } catch (error) {
-      console.error("Error calculating masonry layout:", error)
-    }
+    setPositionedItems(positioned)
+    setContainerHeight(Math.max(...columnHeights) - gap)
   }
 
   useEffect(() => {

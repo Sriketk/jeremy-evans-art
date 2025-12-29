@@ -61,6 +61,8 @@ export default function ArtworkDetailPage() {
       category: category ?? "",
       slug: item?.fields?.title?.replace(/\s+/g, "_").toLowerCase() ?? "",
       about: item?.fields?.aboutThisWork ?? "",
+      width: item?.fields?.image.fields.file.details.image.width ?? 0,
+      height: item?.fields?.image.fields.file.details.image.height ?? 0,
     }));
   };  
 

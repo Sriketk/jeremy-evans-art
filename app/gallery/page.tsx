@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, Suspense } from "react";
 import { GalleryContent } from "@/app/lib/context/galleryContextProvider";
 import GalleryNavigation from "@/components/ui/gallery-navigation";
 import MasonryGrid from "@/components/ui/masonry-grid";
@@ -49,6 +49,8 @@ export default function GalleryPage() {
       category: category,
       slug: item.title.replace(/\s+/g, "_").toLowerCase(),
       about: item.aboutThisWork || "",
+      width: item.image.fields.file.details.image.width,
+      height: item.image.fields.file.details.image.height,
     }));
   };
 
@@ -92,7 +94,6 @@ export default function GalleryPage() {
 
         <div className="relative">
           <MasonryGrid
-            key={activeCategory}
             items={currentArtworks}
             columns={isMobile ? 1 : 3}
             gap={16}

@@ -21,6 +21,8 @@ export default function Home() {
     category: "Portraits",
     slug: image.fields.title.replace(/\s+/g, "_").toLowerCase(),
     about: image.fields.aboutThisWork || "",
+    width: image.fields.image.fields.file.details.image.width,
+    height: image.fields.image.fields.file.details.image.height,
   })) || []
 
   return (
