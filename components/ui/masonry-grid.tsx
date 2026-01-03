@@ -96,7 +96,7 @@ export default function MasonryGrid({
                 fill
                 sizes={`${100 / columns}vw`}
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
-                priority={item.index < 3}
+                priority={item.index < 6}
               />
 
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">

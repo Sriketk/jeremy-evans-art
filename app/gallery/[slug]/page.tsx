@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
-import { useContext } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Artwork, ArtworkType } from "@/app/lib/types";
@@ -26,7 +26,7 @@ export default function ArtworkDetailPage() {
   const { portraits, shoes, woodWork, vehicles, balls, controllers, misc } =
     galleryContent;
 
-  const allArtCategories = [
+  const allArtCategories = useMemo(() => [
     ...portraits,
     ...shoes,
     ...woodWork,
@@ -34,18 +34,18 @@ export default function ArtworkDetailPage() {
     ...balls,
     ...controllers,
     ...misc,
-  ];
+  ], [portraits, shoes, woodWork, vehicles, balls, controllers, misc]);
 
-  const artworkMap = new Map<string, ArtworkType["fields"]>(
+  const artworkMap = useMemo(() => new Map<string, ArtworkType["fields"]>(
     allArtCategories.map((art) => [
       art.title.replace(/\s+/g, "_").toLowerCase(),
       art,
     ])
-  );
+  ), [allArtCategories]);
 
-  const artwork = artworkMap.get(slug);
+  const artwork = useMemo(() => artworkMap.get(slug), [artworkMap, slug]);
 
-  const mapToArtwork = (data: ArtworkType['fields']['angles'], category: string): Artwork[] => {
+  const mapToArtwork = useCallback((data: ArtworkType['fields']['angles'], category: string): Artwork[] => {
     if (!data || data.length === 0) {
       return [];
     }
@@ -64,10 +64,10 @@ export default function ArtworkDetailPage() {
       width: item?.fields?.image.fields.file.details.image.width ?? 0,
       height: item?.fields?.image.fields.file.details.image.height ?? 0,
     }));
-  };  
+  }, [artwork]);  
 
 
-    const angles = mapToArtwork(artwork?.angles ?? [], "Angles");
+    const angles = useMemo(() => mapToArtwork(artwork?.angles ?? [], "Angles"), [artwork]);
   
 
   // In a real application, you would fetch the artwork data based on the slug
@@ -102,7 +102,7 @@ export default function ArtworkDetailPage() {
                   width={800}
                   height={800}
                   className="object-contain w-full"
-                  priority
+                  priority={true}
                 />
               </div>
 
