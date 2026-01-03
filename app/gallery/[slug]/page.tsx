@@ -70,9 +70,6 @@ export default function ArtworkDetailPage() {
     const angles = useMemo(() => mapToArtwork(artwork?.angles ?? [], "Angles"), [artwork]);
   
 
-  // In a real application, you would fetch the artwork data based on the slug
-  // For this example, we'll find it in our mock data
-  // const artwork = allArtwork.find((art) => art.slug === slug) || allArtwork[0];
 
   return (
     <div className="min-h-screen bg-white">
