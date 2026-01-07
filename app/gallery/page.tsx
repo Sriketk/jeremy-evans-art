@@ -19,21 +19,18 @@ export default function GalleryPage() {
 
   const { portraits, shoes, woodWork, balls, vehicles, controllers, misc } = context;
 
-  const [activeCategory, setActiveCategory] = useState("portraits");
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   const isMobile = useMobile();
 
   useEffect(() => {
-    setMounted(true);
-    // Load from localStorage only after mounting
     const savedCategory = localStorage.getItem(LAST_CATEGORY_KEY);
-    if (savedCategory) {
-      setActiveCategory(savedCategory);
-    }
+    setActiveCategory(savedCategory || "portraits");
+    setMounted(true);
   }, []);
 
   useEffect(() => {
-    if (mounted) {
+    if (mounted && activeCategory) {
       localStorage.setItem(LAST_CATEGORY_KEY, activeCategory);
     }
   }, [activeCategory, mounted]);
@@ -75,8 +72,12 @@ export default function GalleryPage() {
   ];
 
   const currentArtworks = useMemo(() => 
-  allArtworks[activeCategory as keyof typeof allArtworks] || [], 
+  activeCategory ? allArtworks[activeCategory as keyof typeof allArtworks] || [] : [], 
   [allArtworks, activeCategory]);
+
+  if (!mounted || !activeCategory) {
+    return <div></div>;
+  }
 
   return (
     <div className="min-h-screen bg-white">
