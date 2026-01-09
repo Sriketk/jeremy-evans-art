@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { motion } from "framer-motion"
 import type { Artwork } from "@/app/lib/types"
 
 interface MasonryGridProps {
@@ -74,9 +75,17 @@ export default function MasonryGrid({
 
   return (
     <div ref={containerRef} className="relative w-full" style={{ height: containerHeight }}>
-      {positionedItems.map((item) => (
-        <div
+      {positionedItems.map((item, idx) => (
+        <motion.div
           key={item.title}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{
+            duration: 0.5,
+            delay: idx * 0.025,
+            ease: [0.25, 0.4, 0.25, 1],
+          }}
           style={{
             position: "absolute",
             left: item.x,
@@ -107,7 +116,7 @@ export default function MasonryGrid({
               </div>
             </div>
           </Link>
-        </div>
+        </motion.div>
       ))}
     </div>
   )
