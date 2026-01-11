@@ -1,5 +1,5 @@
 "use client";
-import { createContext, ReactNode } from "react";
+import { createContext, ReactNode, useMemo } from "react";
 import { ArtworkType } from "../types";
 
 export const GalleryContent = createContext<any>(null);
@@ -25,10 +25,10 @@ export const GalleryContentContextProvider = ({
   misc: ArtworkType["fields"][];
   children: ReactNode;
 }) => {
+
+  const value = useMemo(() => ({ portraits, shoes, woodWork, vehicles, balls, controllers, misc }), [portraits, shoes, woodWork, vehicles, balls, controllers, misc]);
   return (
-    <GalleryContent.Provider
-      value={{ portraits, shoes, woodWork, vehicles, balls, controllers, misc }}
-    >
+    <GalleryContent.Provider value={value}>
       {children}
     </GalleryContent.Provider>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, Suspense, useCallback, useMemo } from "react";
 import { GalleryContent } from "@/app/lib/context/galleryContextProvider";
 import GalleryNavigation from "@/components/ui/gallery-navigation";
 import MasonryGrid from "@/components/ui/masonry-grid";
@@ -19,26 +19,23 @@ export default function GalleryPage() {
 
   const { portraits, shoes, woodWork, balls, vehicles, controllers, misc } = context;
 
-  const [activeCategory, setActiveCategory] = useState("portraits");
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   const isMobile = useMobile();
 
   useEffect(() => {
-    setMounted(true);
-    // Load from localStorage only after mounting
     const savedCategory = localStorage.getItem(LAST_CATEGORY_KEY);
-    if (savedCategory) {
-      setActiveCategory(savedCategory);
-    }
+    setActiveCategory(savedCategory || "portraits");
+    setMounted(true);
   }, []);
 
   useEffect(() => {
-    if (mounted) {
+    if (mounted && activeCategory) {
       localStorage.setItem(LAST_CATEGORY_KEY, activeCategory);
     }
   }, [activeCategory, mounted]);
 
-  const mapToArtwork = (data: ArtworkType["fields"][], category: string): Artwork[] => {
+  const mapToArtwork = useCallback((data: ArtworkType["fields"][], category: string): Artwork[] => {
     return data.map((item) => ({
       title: item.title,
       description: item.artDescription,
@@ -49,10 +46,12 @@ export default function GalleryPage() {
       category: category,
       slug: item.title.replace(/\s+/g, "_").toLowerCase(),
       about: item.aboutThisWork || "",
+      width: item.image.fields.file.details.image.width,
+      height: item.image.fields.file.details.image.height,
     }));
-  };
+  }, []);
 
-  const allArtworks = {
+  const allArtworks = useMemo(() => ({
     portraits: mapToArtwork(portraits, "Portraits"),
     shoes: mapToArtwork(shoes, "Shoes"),
     woodwork: mapToArtwork(woodWork, "Wood Work"),
@@ -60,7 +59,7 @@ export default function GalleryPage() {
     vehicles: mapToArtwork(vehicles, "Vehicles"),
     controllers: mapToArtwork(controllers, "Controllers"),
     misc: mapToArtwork(misc, "Miscellaneous"),
-  };
+  }), [portraits, shoes, woodWork, balls, vehicles, controllers, misc]);
 
   const categories = [
     { key: "portraits", label: "Portraits", count: allArtworks.portraits.length },
@@ -72,7 +71,13 @@ export default function GalleryPage() {
     { key: "misc", label: "Miscellaneous", count: allArtworks.misc.length },
   ];
 
-  const currentArtworks = allArtworks[activeCategory as keyof typeof allArtworks] || [];
+  const currentArtworks = useMemo(() => 
+  activeCategory ? allArtworks[activeCategory as keyof typeof allArtworks] || [] : [], 
+  [allArtworks, activeCategory]);
+
+  if (!mounted || !activeCategory) {
+    return <div></div>;
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -92,7 +97,6 @@ export default function GalleryPage() {
 
         <div className="relative">
           <MasonryGrid
-            key={activeCategory}
             items={currentArtworks}
             columns={isMobile ? 1 : 3}
             gap={16}

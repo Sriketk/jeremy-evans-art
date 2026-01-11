@@ -1,25 +1,5 @@
 import { z } from "zod";
 
-export interface HomePageContent {
-  homePageImages: {
-    fields: {
-      title: string;
-      artDescription: string;
-      image: {
-        fields: {
-          file: {
-            url: string;
-          };
-        };
-      };
-      year: string;
-      category: string;
-      slug: string;
-      aboutThisWork: string;
-    };
-  }[];
-}
-
 export interface Artwork {
   title: string;
   description: string;
@@ -28,7 +8,8 @@ export interface Artwork {
   category: string;
   slug: string;
   about: string;
-  // relatedWork: any;
+  width: number;
+  height: number;
 }
 
 export const imageSchema = z.object({
@@ -37,7 +18,13 @@ export const imageSchema = z.object({
   fields: z.object({
     file: z.object({
       contentType: z.string(),
-      details: z.record(z.string(), z.any()),
+      details: z.object({
+        size: z.number(),
+        image: z.object({
+          width: z.number(),
+          height: z.number(),
+        }),
+      }),
       fileName: z.string(),
       url: z.string(),
     }),

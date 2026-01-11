@@ -1,7 +1,6 @@
 import {
   getPortraitsContent,
   getShoesContent,
-  getGalleryContent,
   getWoodWorkContent,
   getVehiclesContent,
   getBallsContent,

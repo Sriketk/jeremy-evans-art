@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import useMobile from "@/hooks/use-mobile"
@@ -13,7 +13,7 @@ import type { Artwork, ArtworkType } from "@/app/lib/types"
 export default function Home() {
   const { homePageContent } = useContext(HomeContext)
   const isMobile = useMobile()
-  const featuredArtwork: Artwork[] = homePageContent["homePageImages"]?.map((image: ArtworkType) => ({
+  const featuredArtwork: Artwork[] = useMemo(() => homePageContent["homePageImages"]?.map((image: ArtworkType) => ({
     title: image.fields.title,
     description: image.fields.artDescription,
     image: image.fields.image.fields.file.url,
@@ -21,7 +21,9 @@ export default function Home() {
     category: "Portraits",
     slug: image.fields.title.replace(/\s+/g, "_").toLowerCase(),
     about: image.fields.aboutThisWork || "",
-  })) || []
+    width: image.fields.image.fields.file.details.image.width,
+    height: image.fields.image.fields.file.details.image.height,
+  })) || [], [homePageContent])
 
   return (
     <div className="min-h-screen bg-white overflow-hidden">
