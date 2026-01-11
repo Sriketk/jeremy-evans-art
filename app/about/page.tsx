@@ -35,6 +35,7 @@ export default function AboutPage() {
     })
   )
 
+
   useEffect(() => {
     // Progress indicator animation
     const handleScroll = () => {
@@ -134,6 +135,7 @@ export default function AboutPage() {
     }
   }, [])
 
+
   return (
     <div className="min-h-screen bg-white">
       <div className="container px-4 py-16 mx-auto max-w-6xl">
@@ -148,7 +150,9 @@ export default function AboutPage() {
               }`}
             >
               <Image
-                src={aboutPageContent.jeremyEvansPicture.fields.file.url || "/placeholder.svg" || "/placeholder.svg"}
+                src={aboutPageContent.jeremyEvansPicture.fields.file.url.startsWith("//")
+                  ? `https:${aboutPageContent.jeremyEvansPicture.fields.file.url}`
+                  : aboutPageContent.jeremyEvansPicture.fields.file.url || "/placeholder.svg" || "/placeholder.svg"}
                 alt="Artist Portrait"
                 fill
                 className="object-cover"
